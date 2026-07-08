@@ -47,12 +47,24 @@
       font-size: 16px;
       line-height: 1.6;
       overflow-x: hidden;
+      position: relative;
     }
     a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; }
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--bg-base); }
     ::-webkit-scrollbar-thumb { background: var(--accent-cyan); border-radius: 2px; }
+
+    /* Interactive Canvas Background */
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+    }
 
     /* =============================================
        NAVIGATION
@@ -885,6 +897,9 @@
 </head>
 <body>
 
+  <!-- Interactive Dynamic Background Canvas -->
+  <canvas id="bg-canvas"></canvas>
+
   <nav>
     <div class="nav-logo">DANISH <span>IRSYAD</span></div>
     <ul class="nav-links">
@@ -1465,6 +1480,130 @@
         ? 'rgba(7,11,18,0.95)'
         : 'rgba(7,11,18,0.7)';
     });
+
+    // Interactive Node Particle Background Script
+    const bgCanvas = document.getElementById('bg-canvas');
+    const bgCtx = bgCanvas.getContext('2d');
+    let bgWidth, bgHeight;
+    let particlesArray = [];
+    let mouse = { x: null, y: null, radius: 120 };
+    let scrollY = window.scrollY;
+
+    window.addEventListener('mousemove', (event) => {
+      mouse.x = event.x;
+      mouse.y = event.y;
+    });
+
+    window.addEventListener('mouseout', () => {
+      mouse.x = undefined;
+      mouse.y = undefined;
+    });
+
+    window.addEventListener('scroll', () => {
+      let newScrollY = window.scrollY;
+      let scrollDiff = newScrollY - scrollY;
+      scrollY = newScrollY;
+      
+      // Shift particles slightly on scroll for parallax effect
+      particlesArray.forEach(p => {
+        p.y -= scrollDiff * 0.3; // Parallax speed factor
+        
+        // Wrap around boundaries
+        if(p.y < 0) p.y = bgHeight;
+        if(p.y > bgHeight) p.y = 0;
+      });
+    });
+
+    function initCanvas() {
+      bgWidth = window.innerWidth;
+      bgHeight = window.innerHeight;
+      bgCanvas.width = bgWidth;
+      bgCanvas.height = bgHeight;
+      particlesArray = [];
+      
+      // Adjust particle count based on screen size
+      let numberOfParticles = (bgWidth * bgHeight) / 12000;
+      
+      for (let i = 0; i < numberOfParticles; i++) {
+        let size = (Math.random() * 2) + 1;
+        let x = Math.random() * bgWidth;
+        let y = Math.random() * bgHeight;
+        let directionX = (Math.random() * 0.6) - 0.3;
+        let directionY = (Math.random() * 0.6) - 0.3;
+        let color = Math.random() > 0.5 ? 'rgba(13, 255, 212, 0.4)' : 'rgba(123, 47, 255, 0.4)';
+        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+      }
+    }
+
+    class Particle {
+      constructor(x, y, directionX, directionY, size, color) {
+        this.x = x;
+        this.y = y;
+        this.directionX = directionX;
+        this.directionY = directionY;
+        this.size = size;
+        this.color = color;
+      }
+      
+      draw() {
+        bgCtx.beginPath();
+        bgCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+        bgCtx.fillStyle = this.color;
+        bgCtx.fill();
+      }
+      
+      update() {
+        // Natural drift
+        this.x += this.directionX;
+        this.y += this.directionY;
+        
+        // Bounce off walls horizontally
+        if (this.x > bgWidth || this.x < 0) {
+          this.directionX = -this.directionX;
+        }
+        
+        // Wrap around vertically if drifting out of bounds
+        if (this.y > bgHeight) this.y = 0;
+        if (this.y < 0) this.y = bgHeight;
+
+        // Mouse Interaction
+        if (mouse.x != null && mouse.y != null) {
+          let dx = mouse.x - this.x;
+          let dy = mouse.y - this.y;
+          let distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < mouse.radius) {
+            const forceDirectionX = dx / distance;
+            const forceDirectionY = dy / distance;
+            const force = (mouse.radius - distance) / mouse.radius;
+            const pushX = forceDirectionX * force * 3;
+            const pushY = forceDirectionY * force * 3;
+            
+            this.x -= pushX;
+            this.y -= pushY;
+          }
+        }
+        
+        this.draw();
+      }
+    }
+
+    function animateBg() {
+      requestAnimationFrame(animateBg);
+      bgCtx.clearRect(0, 0, bgWidth, bgHeight);
+      
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      initCanvas();
+    });
+
+    // Start background animation
+    initCanvas();
+    animateBg();
   </script>
 </body>
 </html>
