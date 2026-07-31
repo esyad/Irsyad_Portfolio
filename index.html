@@ -541,6 +541,14 @@
     .badge--solo  { background: var(--accent-violet); color: #fff; }
     .badge--jam   { background: #FFB800; color: var(--bg-base); }
     .badge--group { background: rgba(255,255,255,0.1); color: var(--text-secondary); border: 1px solid var(--border); }
+    
+    /* New opaque label for better readability on bright thumbnails */
+    .badge--upcoming { 
+      background: rgba(7, 11, 18, 0.85); 
+      color: var(--accent-cyan);         
+      border: 1px solid var(--border-accent); 
+      backdrop-filter: blur(4px);
+    }
 
     .engine-tags {
       position: absolute;
@@ -1106,25 +1114,29 @@
     <div class="section-label">Featured Work</div>
     <h2 class="section-title">Projects</h2>
 
-    <!-- NEW GALAAAAAH PROJECT -->
+    <!-- UPDATED GALAAAAH PROJECT -->
     <div class="major-project-card reveal">
       <div class="video-ph-pair" style="grid-template-columns: 1fr;">
         <div class="video-ph" style="padding:0; border-right: none;">
-          <img src="https://img.youtube.com/vi/5ISpG9fWjJo/maxresdefault.jpg" alt="GALAAAAAH Teaser Video" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: none; z-index: 1;" />
-          <div class="video-ph-badge badge--group" style="z-index: 3;">DICE Digital Game (Upcoming)</div>
-          <div class="engine-tags" style="z-index: 3;"><span class="engine-tag">Unity 6.0</span></div>
+          <img src="https://img.youtube.com/vi/5ISpG9fWjJo/maxresdefault.jpg" alt="GALAAAAH Teaser Video" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: none; z-index: 1;" />
+          <div class="video-ph-badge badge--upcoming" style="z-index: 3;">DICE Digital Game (Upcoming)</div>
+          <div class="engine-tags" style="z-index: 3;">
+            <span class="engine-tag">Unity 6.0</span>
+            <span class="engine-tag">Janji Siap</span>
+          </div>
         </div>
       </div>
       <div class="project-body">
         <div class="project-info">
-          <h3>GALAAAAAH</h3>
-          <div class="project-subtitle">Group Project | Unity 6.0 | Technical Artist</div>
-          <p>An upcoming 3v3 asymmetric party game featuring traditional Malay heritage and legendary heroes. Developed as a collaborative group project for DICE, targeting both Mobile and PC platforms.</p>
+          <h3>GALAAAAH</h3>
+          <div class="project-subtitle">Team "Janji Siap" | Unity 6.0 | Technical Artist | DICE Digital Games</div>
+          <p>An upcoming 3v3 asymmetric party game featuring traditional Malay heritage and legendary heroes[cite: 1]. Developed for the DICE Digital Games Competition with team "Janji Siap", targeting both Mobile and PC platforms.</p>
           <ul class="feature-list">
+            <li>Developed for the DICE Digital Games Competition with team "Janji Siap"</li>
             <li>Role - Technical Artist</li>
             <li>Built in Unity 6.0 for Mobile and PC platforms</li>
-            <li>3v3 asymmetric multiplayer format (3 Attackers vs. 3 Defenders)</li>
-            <li>Showcases Malay heritage through legendary characters</li>
+            <li>3v3 asymmetric multiplayer format (3 Attackers vs. 3 Defenders)[cite: 1]</li>
+            <li>Showcases Malay heritage through legendary characters[cite: 1]</li>
           </ul>
           <div class="project-links">
             <a href="https://youtu.be/5ISpG9fWjJo" target="_blank" class="link-pill"><span>🎬</span> Teaser Video</a>
@@ -1134,7 +1146,8 @@
           <div class="sidebar-row"><div class="sidebar-row-label">Platform</div><div class="sidebar-row-value">Mobile & PC</div></div>
           <div class="sidebar-row"><div class="sidebar-row-label">Engine</div><div class="sidebar-row-value">Unity 6.0</div></div>
           <div class="sidebar-row"><div class="sidebar-row-label">Role</div><div class="sidebar-row-value">Technical Artist</div></div>
-          <div class="sidebar-row"><div class="sidebar-row-label">Type</div><div class="sidebar-row-value">Group Project</div></div>
+          <div class="sidebar-row"><div class="sidebar-row-label">Team</div><div class="sidebar-row-value">Janji Siap</div></div>
+          <div class="sidebar-row"><div class="sidebar-row-label">Event</div><div class="sidebar-row-value">DICE Digital Games</div></div>
         </div>
       </div>
     </div>
@@ -1366,7 +1379,6 @@
     <h2 class="section-title">Activities &amp; Involvement</h2>
     <div class="timeline">
 
-      <!-- New Timeline Item: UTeM Global Project Based Learning Summer Camp -->
       <div class="timeline-item">
         <div class="timeline-title">UTeM Global Project Based Learning Summer Camp 2026</div>
         <div class="timeline-role">Judge</div>
