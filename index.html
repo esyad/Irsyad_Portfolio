@@ -5,200 +5,178 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Danish Irsyad | XR Programmer & Game Developer</title>
   
-  <!-- Fonts: Space Grotesk (Display), Inter (Body), JetBrains Mono (Tech/UI) -->
+  <!-- Fonts: Playfair Display (Editorial/Display), Inter (Body), JetBrains Mono (Technical) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
 
   <style>
     /* =========================================
-       CORE VARIABLES & RESET
+       COLOR PALETTE & DESIGN TOKENS
        ========================================= */
     :root {
       /* Palette */
-      --bg-base: #09090b;       /* Very dark charcoal */
-      --bg-surface: #121214;    /* Slightly lighter surface */
-      --bg-panel: #18181b;      /* Panel background */
-      --text-main: #f4f4f5;
-      --text-muted: #a1a1aa;
-      --text-dark: #52525b;
-      --accent: #f97316;        /* Engine Orange */
-      --accent-hover: #ea580c;
-      --border: #27272a;
-      --border-light: #3f3f46;
+      --beige-light: #F7F5F0;
+      --beige: #F3EFE7;
+      --beige-dark: #E6DFD3;
+      --maroon: #7A2021;
+      --maroon-dark: #4A1212;
+      --charcoal: #1A1513;
+      --charcoal-light: #2C2522;
+      
+      /* Dynamic Theme Variables (Updated via JS/CSS) */
+      --bg-color: var(--beige);
+      --text-main: var(--charcoal);
+      --text-muted: #5C544F;
+      --accent: var(--maroon);
+      --border-color: rgba(26, 21, 19, 0.15);
       
       /* Typography */
-      --font-display: 'Space Grotesk', sans-serif;
+      --font-display: 'Playfair Display', serif;
       --font-body: 'Inter', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
       
       /* Layout */
-      --grid-gap: 2rem;
-      --content-max: 1400px;
+      --content-max: 1300px;
       --section-padding: 8rem 2rem;
-      
-      /* Misc */
-      --transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    /* Theme Overrides for Dark/Cinematic Sections */
+    body[data-theme="video"],
+    body[data-theme="contact"] {
+      --text-main: var(--beige-light);
+      --text-muted: #A89F98;
+      --border-color: rgba(243, 239, 231, 0.15);
     }
+    
+    body[data-theme="video"] .project-frame { background: var(--charcoal-light); border-color: var(--border-color); }
+    body[data-theme="contact"] .project-frame { background: var(--maroon-dark); border-color: var(--border-color); }
 
-    html {
-      scroll-behavior: smooth;
-      background-color: var(--bg-base);
-    }
-
+    /* =========================================
+       RESET & BASE
+       ========================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    
     body {
-      color: var(--text-main);
       font-family: var(--font-body);
+      color: var(--text-main);
       font-size: 1rem;
       line-height: 1.6;
       overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-      
-      /* Tech Grid Background */
-      background-image: 
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 100px 100px;
-      background-position: center top;
-      background-attachment: fixed;
+      background-color: var(--beige); /* Fallback */
+      transition: color 0.8s ease;
     }
 
-    /* Container */
-    .container {
-      max-width: var(--content-max);
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-      transition: color var(--transition);
-    }
-
-    img, video {
-      display: block;
-      max-width: 100%;
-      height: auto;
-      object-fit: cover;
-    }
-
-    ul {
-      list-style: none;
-    }
-
-    /* Typography Defaults */
-    h1, h2, h3, h4 {
-      font-family: var(--font-display);
-      font-weight: 700;
-      line-height: 1.1;
-      text-transform: uppercase;
-    }
-
-    .mono { font-family: var(--font-mono); }
-    .accent { color: var(--accent); }
+    a { color: inherit; text-decoration: none; transition: all var(--transition); }
+    img { display: block; max-width: 100%; height: auto; }
+    ul { list-style: none; }
 
     /* =========================================
-       UI ELEMENTS & DECORATIONS
+       INTERACTIVE BACKGROUND SYSTEM
        ========================================= */
-    .crosshair {
-      position: absolute;
-      width: 10px;
-      height: 10px;
+    #bg-system {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
       pointer-events: none;
-      z-index: 10;
+      background-color: var(--bg-color);
+      transition: background-color 1s ease;
     }
-    .crosshair::before, .crosshair::after {
+    
+    /* Subtle Grain/Noise Overlay */
+    #bg-system::after {
       content: '';
       position: absolute;
-      background: var(--text-muted);
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.8;
+      mix-blend-mode: multiply;
     }
-    .crosshair::before { top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%); }
-    .crosshair::after { left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%); }
 
-    .crosshair.tl { top: -5px; left: -5px; }
-    .crosshair.tr { top: -5px; right: -5px; }
-    .crosshair.bl { bottom: -5px; left: -5px; }
-    .crosshair.br { bottom: -5px; right: -5px; }
+    /* Technical Grid (Visible only in Skills section) */
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(var(--border-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    body[data-theme="skills"] .bg-grid { opacity: 0.4; }
 
+    /* Parallax shapes */
+    .bg-shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .bg-shape.shape-1 {
+      width: 600px; height: 600px;
+      background: rgba(122, 32, 33, 0.08);
+      top: 10%; right: -10%;
+    }
+    .bg-shape.shape-2 {
+      width: 500px; height: 500px;
+      background: rgba(44, 37, 34, 0.05);
+      bottom: 10%; left: -5%;
+    }
+    body[data-theme="hero"] .shape-1, body[data-theme="hero"] .shape-2,
+    body[data-theme="projects"] .shape-1 { opacity: 1; }
+
+    /* =========================================
+       TYPOGRAPHY & UTILITIES
+       ========================================= */
+    .container { max-width: var(--content-max); margin: 0 auto; padding: 0 2rem; }
+    .mono { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    .editorial-display { font-family: var(--font-display); font-weight: 700; line-height: 1.1; }
+    
+    .section-header { margin-bottom: 4rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; display: flex; justify-content: space-between; align-items: flex-end; transition: border-color 0.8s ease; }
+    .section-title { font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 600; color: var(--text-main); }
+    .section-num { font-family: var(--font-mono); color: var(--accent); font-weight: 700; }
+
+    /* Button */
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.75rem;
       font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 0.75rem 1.5rem;
-      border: 1px solid var(--border-light);
-      background: var(--bg-surface);
-      color: var(--text-main);
+      letter-spacing: 0.1em;
+      padding: 1rem 2rem;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      background: transparent;
       cursor: pointer;
-      transition: all var(--transition);
       position: relative;
       overflow: hidden;
+      transition: all var(--transition);
     }
     .btn::before {
       content: '';
       position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
+      inset: 0;
       background: var(--accent);
+      transform: translateY(100%);
       transition: transform var(--transition);
       z-index: 0;
     }
-    .btn:hover::before {
-      transform: translateX(100%);
-    }
-    .btn span { position: relative; z-index: 1; }
-    .btn:hover { border-color: var(--accent); }
+    .btn:hover::before { transform: translateY(0); }
+    .btn:hover { color: var(--beige-light); border-color: var(--accent); }
+    .btn span { position: relative; z-index: 1; font-weight: 500; }
 
-    .link-bracket {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
-    }
-    .link-bracket:hover { color: var(--accent); }
-    .link-bracket::before { content: '['; margin-right: 0.25rem; color: var(--border-light); transition: color var(--transition); }
-    .link-bracket::after { content: ']'; margin-left: 0.25rem; color: var(--border-light); transition: color var(--transition); }
-    .link-bracket:hover::before, .link-bracket:hover::after { color: var(--accent); }
+    .btn-solid { background: var(--accent); color: var(--beige-light); }
+    .btn-solid::before { background: var(--charcoal); }
 
-    /* Section Headers */
-    .section-header {
-      margin-bottom: 4rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
-    .section-title {
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      letter-spacing: -0.02em;
-    }
-    .section-id {
-      font-family: var(--font-mono);
-      color: var(--accent);
-      font-size: 0.875rem;
-    }
-
-    /* Scroll Reveal Animation */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-    }
-    .reveal.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    /* Scroll Reveal */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
 
     /* =========================================
        NAVIGATION
@@ -206,746 +184,536 @@
     .navbar {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: rgba(9, 9, 11, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 1rem 0;
+      z-index: 100;
+      padding: 1.5rem 0;
+      transition: background 0.4s ease, border-color 0.8s ease;
+      border-bottom: 1px solid transparent;
     }
-    .nav-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .navbar.scrolled {
+      background: rgba(243, 239, 231, 0.9);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-color);
     }
-    .nav-brand {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-    }
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-    }
-    .nav-links a {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      position: relative;
-    }
-    .nav-links a:hover {
-      color: var(--text-main);
-    }
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px; left: 0;
-      width: 100%; height: 1px;
-      background: var(--accent);
-      transform: scaleX(0);
-      transform-origin: right;
-      transition: transform var(--transition);
-    }
-    .nav-links a:hover::after {
-      transform: scaleX(1);
-      transform-origin: left;
-    }
-    
-    .mobile-toggle {
-      display: none;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--text-main);
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-    }
+    body[data-theme="video"] .navbar.scrolled { background: rgba(26, 21, 19, 0.9); }
+    body[data-theme="contact"] .navbar.scrolled { background: rgba(122, 32, 33, 0.9); }
+
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; }
+    .nav-brand { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.05em; }
+    .nav-brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.5rem; }
+    .nav-links a { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-main); position: relative; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 1px; background: var(--accent); transform: scaleX(0); transform-origin: right; transition: transform var(--transition); }
+    .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
 
     /* =========================================
        HERO SECTION
        ========================================= */
-    .hero {
+    #hero {
       min-height: 100vh;
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: var(--grid-gap);
-      align-items: end;
-      padding-top: 15vh;
+      display: flex;
+      align-items: center;
+      padding-top: 10vh;
       padding-bottom: 5rem;
     }
-    .hero-content {
-      grid-column: 1 / 9;
-      position: relative;
-      z-index: 2;
-    }
-    .hero-meta {
-      display: flex;
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
       align-items: center;
-      gap: 1.5rem;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--accent);
-      margin-bottom: 2rem;
     }
-    .hero-meta::before {
-      content: '';
-      width: 40px;
-      height: 1px;
-      background: var(--accent);
-    }
-    .hero-title {
-      font-size: clamp(4rem, 8vw, 8rem);
-      line-height: 0.9;
-      margin-bottom: 1rem;
-      letter-spacing: -0.04em;
-    }
-    .hero-subtitle {
-      font-size: clamp(1.2rem, 2vw, 2rem);
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      font-weight: 400;
-      margin-bottom: 3rem;
-    }
-    .hero-desc {
-      font-size: 1.1rem;
-      max-width: 600px;
-      color: var(--text-muted);
-      margin-bottom: 3rem;
-      border-left: 2px solid var(--border);
-      padding-left: 1.5rem;
-    }
-    .hero-desc strong { color: var(--text-main); }
+    .hero-content { display: flex; flex-direction: column; gap: 1.5rem; }
+    .hero-eyebrow { font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent); display: flex; align-items: center; gap: 1rem; }
+    .hero-eyebrow::after { content: ''; width: 40px; height: 1px; background: var(--accent); }
     
+    .hero-title { font-family: var(--font-display); font-size: clamp(4rem, 8vw, 6.5rem); line-height: 0.9; color: var(--text-main); margin-left: -0.25rem; }
+    .hero-subtitle { font-family: var(--font-mono); font-size: 1.1rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    .hero-desc { font-size: 1.1rem; color: var(--text-muted); max-width: 500px; line-height: 1.8; border-left: 2px solid var(--accent); padding-left: 1.5rem; margin: 1rem 0; }
+    .hero-desc strong { color: var(--text-main); font-weight: 600; }
+    
+    .hero-actions { display: flex; gap: 1rem; margin-top: 1rem; }
+
     .hero-visual {
-      grid-column: 9 / 13;
       position: relative;
-      border: 1px solid var(--border);
-      background: var(--bg-surface);
-      height: 400px;
-      display: flex;
-      flex-direction: column;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      background: var(--beige-light);
     }
-    .viewport-header {
-      border-bottom: 1px solid var(--border);
-      padding: 0.5rem 1rem;
-      display: flex;
-      justify-content: space-between;
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--text-dark);
-    }
-    .viewport-content {
-      flex: 1;
+    .hero-visual-inner {
+      width: 100%;
+      aspect-ratio: 4/5;
       position: relative;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #000;
     }
-    .viewport-content img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.6;
-      filter: grayscale(100%) contrast(1.2);
-      transition: filter var(--transition), opacity var(--transition);
-    }
-    .hero-visual:hover .viewport-content img {
-      filter: grayscale(0%) contrast(1);
-      opacity: 1;
-    }
-    .viewport-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.2) 50%);
-      background-size: 100% 4px;
-      pointer-events: none;
-    }
+    .hero-visual img { width: 100%; height: 100%; object-fit: cover; }
+    
+    /* Technical crosshairs for visual interest */
+    .crosshair { position: absolute; width: 10px; height: 10px; z-index: 10; pointer-events: none; }
+    .crosshair::before, .crosshair::after { content: ''; position: absolute; background: var(--accent); }
+    .crosshair::before { top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%); }
+    .crosshair::after { left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%); }
+    .crosshair.tl { top: -5px; left: -5px; } .crosshair.tr { top: -5px; right: -5px; }
+    .crosshair.bl { bottom: -5px; left: -5px; } .crosshair.br { bottom: -5px; right: -5px; }
 
     /* =========================================
-       PROJECTS / WORK
+       SELECTED WORK (STRICT LAYOUT)
        ========================================= */
-    #projects { padding: var(--section-padding); }
+    #work { padding: var(--section-padding); }
     
-    .project-module {
+    .project-row {
       display: grid;
-      grid-template-columns: 250px 1fr 300px;
-      gap: 3rem;
-      padding: 4rem 0;
-      border-bottom: 1px solid var(--border);
+      grid-template-columns: 1.4fr 1fr; /* Image takes slightly more space */
+      gap: 4rem;
+      align-items: center;
+      padding: 6rem 0;
+      border-bottom: 1px solid var(--border-color);
     }
-    
-    /* Meta Column */
-    .proj-meta { display: flex; flex-direction: column; gap: 1rem; }
-    .proj-type {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--bg-base);
-      background: var(--accent);
-      padding: 0.25rem 0.5rem;
-      display: inline-block;
-      align-self: flex-start;
-      margin-bottom: 1rem;
-    }
-    .proj-title { font-size: 2.5rem; line-height: 1; }
-    .proj-specs {
-      list-style: none;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      margin-top: 1rem;
-    }
-    .proj-specs li {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      border-top: 1px solid var(--border);
-      padding-top: 0.75rem;
-    }
-    .proj-specs span { color: var(--text-dark); font-size: 0.7rem; }
+    .project-row:last-child { border-bottom: none; }
 
-    /* Media Column */
-    .proj-media {
+    /* Project Frame/Border */
+    .project-frame-wrapper {
       position: relative;
-      border: 1px solid var(--border);
-      background: var(--bg-panel);
       padding: 1rem;
+      border: 1px solid var(--border-color);
+      background: var(--beige-light);
+      transition: border-color var(--transition), background var(--transition);
     }
-    .proj-media-inner {
+    .project-image {
       position: relative;
       width: 100%;
       aspect-ratio: 16/9;
-      background: #000;
       overflow: hidden;
+      background: var(--charcoal); /* Prevents white flash while loading */
     }
-    .proj-media img {
+    .project-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     }
-    .project-module:hover .proj-media img { transform: scale(1.05); }
-
-    /* Details Column */
-    .proj-desc { display: flex; flex-direction: column; gap: 1.5rem; }
-    .proj-desc p { font-size: 0.95rem; color: var(--text-muted); }
-    .proj-features {
-      font-size: 0.85rem;
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    .proj-features li {
-      position: relative;
-      padding-left: 1rem;
-    }
-    .proj-features li::before {
-      content: '>';
+    /* Subtle Maroon Overlay on Hover */
+    .project-image::after {
+      content: '';
       position: absolute;
-      left: 0;
-      color: var(--accent);
-      font-family: var(--font-mono);
+      inset: 0;
+      background: var(--maroon);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+      mix-blend-mode: multiply;
     }
-    .proj-links {
-      margin-top: auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
+    .project-row:hover .project-image img { transform: scale(1.03); }
+    .project-row:hover .project-image::after { opacity: 0.15; }
+    .project-row:hover .project-frame-wrapper { border-color: var(--accent); }
 
-    /* Secondary Projects Variation */
-    .project-secondary {
-      grid-template-columns: 1fr 1fr;
+    /* Project Info */
+    .project-info { display: flex; flex-direction: column; gap: 1.5rem; }
+    .project-badge {
+      font-family: var(--font-mono); font-size: 0.7rem; color: var(--beige);
+      background: var(--maroon); padding: 0.3rem 0.6rem;
+      align-self: flex-start; letter-spacing: 0.1em;
     }
-    .project-secondary .proj-meta { grid-column: 1 / 2; }
-    .project-secondary .proj-desc { grid-column: 1 / 2; }
-    .project-secondary .proj-media { grid-column: 2 / 3; grid-row: 1 / 3; height: 100%; }
+    .project-badge.badge-jam { background: #B8860B; } /* Gold for 1st place */
+    
+    .project-title { font-family: var(--font-display); font-size: 2.5rem; line-height: 1.1; color: var(--text-main); }
+    .project-desc { font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; }
+    
+    /* Technical Grid inside project */
+    .project-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem 1rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 0.5rem;
+    }
+    .meta-item { display: flex; flex-direction: column; gap: 0.25rem; }
+    .meta-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; }
+    .meta-value { font-family: var(--font-body); font-weight: 500; font-size: 0.9rem; color: var(--text-main); }
+
+    .project-links { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; }
+    .proj-link { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.1em; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .proj-link:hover { color: var(--accent); }
+    .proj-link::before { content: '→'; color: var(--accent); }
 
     /* =========================================
-       SKILLS (Developer Stack)
+       DEVELOPER STACK (BARS)
        ========================================= */
-    #skills { padding: var(--section-padding); background: var(--bg-surface); }
+    #skills { padding: var(--section-padding); }
     
     .stack-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
     }
-    .stack-category {
-      border: 1px solid var(--border);
-      background: var(--bg-base);
-      padding: 2rem;
-      position: relative;
-    }
-    .stack-header {
+    .stack-category { display: flex; flex-direction: column; gap: 2rem; }
+    .stack-category-title {
       font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--text-dark);
-      margin-bottom: 2rem;
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 0.5rem;
-    }
-    .stack-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .stack-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-    }
-    .stack-name {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
+      font-size: 0.9rem;
       color: var(--text-main);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+      letter-spacing: 0.1em;
     }
-    .stack-meta {
+
+    .skill-item { display: flex; flex-direction: column; gap: 0.5rem; }
+    .skill-header { display: flex; justify-content: space-between; align-items: flex-end; }
+    .skill-name { font-family: var(--font-body); font-weight: 600; font-size: 1.1rem; color: var(--text-main); }
+    .skill-level { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); }
+    
+    .skill-bar-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(26, 21, 19, 0.1); /* Dark track */
+      position: relative;
+      overflow: hidden;
+    }
+    .skill-bar-fill {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      background: var(--maroon);
+      width: 0%; /* Set via inline style, animated via JS */
+      transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    
+    /* Tags for Dev/AI tools without strict % */
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .skill-tag {
       font-family: var(--font-mono);
       font-size: 0.75rem;
-      color: var(--accent);
+      color: var(--text-main);
+      padding: 0.4rem 0.8rem;
+      border: 1px solid var(--border-color);
+      background: var(--beige-light);
     }
 
     /* =========================================
-       VIDEO EDITING / CREATIVE
+       VIDEO EDITING & TRAILERS
        ========================================= */
-    #creative { padding: var(--section-padding); }
+    #video { padding: var(--section-padding); }
+    .video-intro { max-width: 600px; color: var(--text-muted); font-size: 1.1rem; margin-bottom: 4rem; }
     
     .video-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
+      gap: 2rem;
     }
-    .video-card {
-      border: 1px solid var(--border);
-      background: var(--bg-panel);
-      display: flex;
-      flex-direction: column;
+    .video-card { display: flex; flex-direction: column; gap: 1.25rem; group; cursor: pointer; }
+    
+    .video-frame {
+      position: relative;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      background: var(--charcoal-light);
       transition: border-color var(--transition);
     }
-    .video-card:hover { border-color: var(--accent); }
     .video-thumb {
-      aspect-ratio: 16/9;
       position: relative;
+      aspect-ratio: 16/9;
       overflow: hidden;
       background: #000;
     }
-    .video-thumb img {
-      width: 100%; height: 100%;
-      opacity: 0.8;
-      transition: opacity var(--transition), transform 0.5s ease;
+    .video-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    
+    /* Play Button Hover Effect */
+    .play-btn {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      width: 60px; height: 60px;
+      background: rgba(122, 32, 33, 0.9);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transition: all var(--transition);
+      z-index: 2;
     }
-    .video-card:hover .video-thumb img { opacity: 1; transform: scale(1.03); }
-    .video-info {
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+    .play-btn::before {
+      content: '';
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 8px 0 8px 14px;
+      border-color: transparent transparent transparent var(--beige-light);
+      margin-left: 4px;
     }
-    .video-title { font-size: 1.1rem; }
-    .video-desc { font-size: 0.85rem; color: var(--text-muted); }
+    
+    .video-thumb::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--maroon);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      mix-blend-mode: multiply;
+    }
+
+    .video-card:hover .video-frame { border-color: var(--maroon); }
+    .video-card:hover .video-thumb img { transform: scale(1.05); }
+    .video-card:hover .play-btn { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    .video-card:hover .video-thumb::after { opacity: 0.3; }
+
+    .video-info { display: flex; flex-direction: column; gap: 0.25rem; }
+    .video-title { font-family: var(--font-display); font-size: 1.25rem; color: var(--text-main); }
+    .video-desc { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
 
     /* =========================================
        EXPERIENCE & EDUCATION
        ========================================= */
     #experience { padding: var(--section-padding); }
     
-    .timeline {
-      display: flex;
-      flex-direction: column;
-      border-left: 1px solid var(--border-light);
-      margin-left: 1rem;
-    }
-    .timeline-node {
-      position: relative;
-      padding-left: 3rem;
-      padding-bottom: 4rem;
-    }
+    .timeline { display: flex; flex-direction: column; position: relative; margin-left: 1rem; }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--border-color); }
+    
+    .timeline-node { position: relative; padding-left: 3rem; padding-bottom: 4rem; }
+    .timeline-node:last-child { padding-bottom: 0; }
     .timeline-node::before {
-      content: '';
-      position: absolute;
-      left: -4px; top: 0;
-      width: 7px; height: 7px;
-      background: var(--accent);
+      content: ''; position: absolute; left: -4px; top: 8px;
+      width: 9px; height: 9px; background: var(--maroon); border-radius: 50%;
     }
-    .timeline-node::after {
-      content: '';
-      position: absolute;
-      left: -12px; top: -8px;
-      width: 23px; height: 23px;
-      border: 1px solid var(--border-light);
-      border-radius: 50%;
-    }
-    .node-header {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      margin-bottom: 1rem;
-    }
-    .node-role {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--accent);
-    }
-    .node-title {
-      font-size: 1.5rem;
-    }
-    .node-desc {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      max-width: 700px;
-      margin-bottom: 1.5rem;
-    }
-    .node-img {
-      max-width: 400px;
-      border: 1px solid var(--border);
-      filter: grayscale(80%);
-      transition: filter var(--transition);
-    }
-    .timeline-node:hover .node-img { filter: grayscale(0%); }
+    
+    .node-role { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
+    .node-title { font-family: var(--font-display); font-size: 1.75rem; color: var(--text-main); margin-bottom: 1rem; }
+    .node-desc { font-size: 1.05rem; color: var(--text-muted); max-width: 700px; }
 
-    /* Education Grid */
-    .edu-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      margin-top: 4rem;
-    }
-    .edu-card {
-      border-top: 2px solid var(--border);
-      padding-top: 1.5rem;
-    }
-    .edu-year {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-dark);
-      margin-bottom: 0.5rem;
-    }
-    .edu-school { font-size: 1.25rem; margin-bottom: 0.5rem; }
-    .edu-deg { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; }
-    .edu-grade {
-      font-family: var(--font-mono);
-      color: var(--accent);
-      font-size: 1rem;
-    }
+    .edu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 6rem; padding-top: 4rem; border-top: 1px solid var(--border-color); }
+    .edu-card { display: flex; flex-direction: column; gap: 0.5rem; }
+    .edu-year { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); letter-spacing: 0.1em; }
+    .edu-school { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-main); line-height: 1.2; }
+    .edu-deg { font-size: 0.95rem; color: var(--text-muted); }
+    .edu-grade { font-family: var(--font-mono); font-size: 1rem; color: var(--text-main); font-weight: 700; margin-top: 0.5rem; }
 
     /* =========================================
-       ABOUT & CONTACT
+       CONTACT / FOOTER
        ========================================= */
-    #about { padding: var(--section-padding); background: var(--bg-surface); }
+    #contact { padding: 10rem 2rem 6rem 2rem; text-align: center; border-top: 1px solid var(--border-color); }
+    .contact-title { font-family: var(--font-display); font-size: clamp(3rem, 6vw, 6rem); color: var(--text-main); line-height: 1.1; margin-bottom: 1.5rem; }
+    .contact-title span { font-style: italic; color: var(--beige); }
+    .contact-desc { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 4rem auto; }
     
-    .about-layout {
-      display: grid;
-      grid-template-columns: 1fr 400px;
-      gap: 4rem;
-      align-items: start;
-    }
-    .about-text {
-      font-size: 1.1rem;
-      color: var(--text-muted);
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-    .about-text strong { color: var(--text-main); }
-    .about-text .lead {
-      font-family: var(--font-display);
-      font-size: 1.75rem;
-      color: var(--text-main);
-      line-height: 1.3;
-      border-left: 2px solid var(--accent);
-      padding-left: 1.5rem;
-    }
+    .contact-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 6rem; }
     
-    .about-photo {
-      border: 1px solid var(--border);
-      background: var(--bg-panel);
-      padding: 1rem;
-      position: relative;
-    }
-    .about-photo img {
-      width: 100%;
-      aspect-ratio: 3/4;
-      object-fit: cover;
-      filter: grayscale(100%);
-      transition: filter var(--transition);
-    }
-    .about-photo:hover img { filter: grayscale(0%); }
-
-    #contact { 
-      padding: 10rem 2rem; 
-      text-align: center; 
-      border-top: 1px solid var(--border);
-    }
-    .contact-title {
-      font-size: clamp(3rem, 6vw, 6rem);
-      margin-bottom: 1.5rem;
-    }
-    .contact-title span { color: var(--accent); }
-    .contact-desc {
-      font-size: 1.2rem;
-      color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto 4rem auto;
-    }
-    .contact-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-    .footer-meta {
-      margin-top: 8rem;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-dark);
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
+    .footer-meta { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.5rem; letter-spacing: 0.05em; text-transform: uppercase; }
 
     /* =========================================
        RESPONSIVE DESIGN
        ========================================= */
-    @media (max-width: 1100px) {
-      .project-module { grid-template-columns: 1fr; gap: 2rem; }
-      .proj-meta { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; }
-      .proj-type { margin-bottom: 0; }
-      .proj-specs { flex-direction: row; flex-wrap: wrap; width: 100%; border-top: 1px solid var(--border); padding-top: 1rem; }
-      .proj-specs li { border-top: none; padding-top: 0; border-left: 1px solid var(--border); padding-left: 1rem; }
-      .proj-specs li:first-child { border-left: none; padding-left: 0; }
-      
-      .project-secondary { grid-template-columns: 1fr; }
-      .project-secondary .proj-media { grid-column: 1 / -1; grid-row: auto; }
-      
-      .about-layout { grid-template-columns: 1fr; }
-      .about-photo { max-width: 400px; margin: 0 auto; }
-    }
-
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; padding-top: 20vh; text-align: center; }
-      .hero-content { grid-column: 1 / -1; }
-      .hero-meta { justify-content: center; }
-      .hero-desc { margin: 0 auto 3rem auto; border-left: none; border-top: 2px solid var(--border); padding-left: 0; padding-top: 1.5rem; }
-      .hero-visual { display: none; /* Hide visual on mobile to prioritize text */ }
-      
-      .stack-grid { grid-template-columns: 1fr; }
-      .video-grid { grid-template-columns: 1fr; }
-      .edu-grid { grid-template-columns: 1fr; }
-      
-      .nav-links { display: none; }
-      .mobile-toggle { display: block; }
+    @media (max-width: 1024px) {
+      .project-row { grid-template-columns: 1fr; gap: 2.5rem; }
+      .project-frame-wrapper { max-width: 800px; margin: 0 auto; }
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .hero-eyebrow { justify-content: center; }
+      .hero-desc { margin: 1.5rem auto; border-left: none; border-top: 2px solid var(--accent); padding-left: 0; padding-top: 1.5rem; }
+      .hero-actions { justify-content: center; }
+      .hero-visual { display: none; }
+      .stack-grid, .video-grid, .edu-grid { grid-template-columns: 1fr; }
     }
     
+    @media (max-width: 768px) {
+      :root { --section-padding: 5rem 1.5rem; }
+      .nav-links { display: none; }
+      .project-title { font-size: 2rem; }
+      .project-meta-grid { grid-template-columns: 1fr; gap: 1rem; }
+    }
+
+    /* Accessibility / Reduced Motion */
     @media (prefers-reduced-motion: reduce) {
-      .reveal { transition: none; opacity: 1; transform: none; }
-      .btn::before { display: none; }
-      img, video { transition: none !important; filter: none !important; transform: none !important; }
+      * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+      .skill-bar-fill { transition: none !important; }
+      #bg-system { transition: none; }
+      .bg-shape { display: none; }
     }
   </style>
 </head>
-<body>
+<body data-theme="hero">
+
+  <!-- DYNAMIC BACKGROUND SYSTEM -->
+  <div id="bg-system">
+    <div class="bg-grid"></div>
+    <div class="bg-shape shape-1" id="parallax-shape-1"></div>
+    <div class="bg-shape shape-2" id="parallax-shape-2"></div>
+  </div>
 
   <!-- NAVIGATION -->
-  <nav class="navbar">
+  <nav class="navbar" id="navbar">
     <div class="container nav-inner">
-      <div class="nav-brand">DANISH IRSYAD</div>
+      <div class="nav-brand">Danish <span>Irsyad</span></div>
       <div class="nav-links">
-        <a href="#projects">Work</a>
+        <a href="#work">Work</a>
         <a href="#skills">Skills</a>
+        <a href="#video">Video</a>
         <a href="#experience">Experience</a>
-        <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </div>
-      <button class="mobile-toggle">MENU</button>
     </div>
   </nav>
 
   <!-- HERO SECTION -->
-  <header class="hero container">
-    <div class="hero-content reveal">
-      <div class="hero-meta">SYS.INIT // UTeM</div>
-      <h1 class="hero-title">Danish<br>Irsyad</h1>
-      <h2 class="hero-subtitle">XR Programmer & Game Developer</h2>
-      <div class="hero-desc">
-        Final-year <strong>Game Technology student</strong> (CGPA 3.83) specialising in <strong>Mixed Reality</strong> and real-time simulation. Currently shipping <strong>GearUp</strong> — an MR automotive training sim on Meta Quest 3S.
+  <section id="hero" class="section-trigger" data-theme-target="hero">
+    <div class="container hero-grid">
+      <div class="hero-content reveal">
+        <div class="hero-eyebrow">UTeM / MALAYSIA</div>
+        <h1 class="hero-title">Danish<br>Irsyad</h1>
+        <div class="hero-subtitle">XR Programmer & Game Developer</div>
+        <p class="hero-desc">
+          Final-year <strong>Game Technology student</strong> (CGPA 3.83) specialising in <strong>Mixed Reality</strong> and real-time simulation. Currently shipping <strong>GearUp</strong> — an MR automotive training sim on Meta Quest 3S.
+        </p>
+        <div class="hero-actions">
+          <a href="#work" class="btn btn-solid"><span>View Selected Work</span></a>
+          <a href="DANISH%20IRSYAD%20CV.pdf" download class="btn"><span>Resume</span></a>
+        </div>
       </div>
-      <a href="#projects" class="btn"><span>EXPLORE WORK</span></a>
-    </div>
-    <div class="hero-visual reveal">
-      <div class="crosshair tl"></div>
-      <div class="crosshair tr"></div>
-      <div class="crosshair bl"></div>
-      <div class="crosshair br"></div>
-      <div class="viewport-header">
-        <span>viewport_01</span>
-        <span>STATUS: ACTIVE</span>
-      </div>
-      <div class="viewport-content">
-        <div class="viewport-overlay"></div>
-        <img src="gmbr sendiri (1).png" alt="Danish Irsyad" />
+      
+      <div class="hero-visual reveal">
+        <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
+        <div class="hero-visual-inner">
+          <img src="gmbr sendiri (1).png" alt="Danish Irsyad Professional Portrait" />
+        </div>
       </div>
     </div>
-  </header>
+  </section>
 
-  <!-- PROJECTS SECTION -->
-  <section id="projects">
+  <!-- SELECTED WORK SECTION -->
+  <section id="work" class="section-trigger" data-theme-target="projects">
     <div class="container">
       <div class="section-header reveal">
         <h2 class="section-title">Selected Work</h2>
-        <span class="section-id">01 // PROJECTS</span>
+        <span class="section-num">01</span>
       </div>
 
-      <!-- GearUp -->
-      <article class="project-module reveal">
-        <div class="proj-meta">
-          <span class="proj-type">★ FINAL YEAR PROJECT</span>
-          <h3 class="proj-title">GearUp</h3>
-          <ul class="proj-specs">
-            <li><span>ROLE</span> Solo - Lead Dev</li>
-            <li><span>ENGINE</span> Unity 6.3</li>
-            <li><span>PLATFORM</span> Meta Quest 3S (MR)</li>
-          </ul>
+      <!-- PROJECT 1: GALAAAAH -->
+      <article class="project-row reveal">
+        <div class="project-frame-wrapper">
+          <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
+          <div class="project-image">
+            <img src="https://img.youtube.com/vi/5ISpG9fWjJo/maxresdefault.jpg" alt="GALAAAAH Screenshot" />
+          </div>
         </div>
-        <div class="proj-media">
-          <div class="crosshair tl"></div>
-          <div class="crosshair tr"></div>
-          <div class="crosshair bl"></div>
-          <div class="crosshair br"></div>
-          <div class="proj-media-inner">
+        <div class="project-info">
+          <span class="project-badge">UPCOMING DICE DIGITAL GAME</span>
+          <h3 class="project-title">GALAAAAH</h3>
+          <p class="project-desc">An upcoming 3v3 asymmetric party game featuring traditional Malay heritage and legendary heroes. Developed for the DICE Digital Games Competition with team "Janji Siap", targeting both Mobile and PC platforms.</p>
+          
+          <div class="project-meta-grid">
+            <div class="meta-item"><span class="meta-label">Role</span><span class="meta-value">Technical Artist</span></div>
+            <div class="meta-item"><span class="meta-label">Engine</span><span class="meta-value">Unity 6.0</span></div>
+            <div class="meta-item"><span class="meta-label">Platform</span><span class="meta-value">Mobile & PC</span></div>
+            <div class="meta-item"><span class="meta-label">Team</span><span class="meta-value">Janji Siap</span></div>
+          </div>
+          
+          <div class="project-links">
+            <a href="https://youtu.be/5ISpG9fWjJo" target="_blank" class="proj-link">Teaser Video</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROJECT 2: GearUp -->
+      <article class="project-row reveal">
+        <div class="project-frame-wrapper">
+          <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
+          <div class="project-image">
             <img src="https://img.youtube.com/vi/VC0Wj0lu6FI/hqdefault.jpg" alt="GearUp Gameplay" />
           </div>
         </div>
-        <div class="proj-desc">
-          <p>An immersive Mixed Reality tabletop simulator that puts a Perodua Axia engine in your hands - without needing a real engine bay. GearUp uses Meta Quest 3S passthrough to layer virtual engine components onto your physical workspace.</p>
-          <ul class="proj-features">
-            <li>Meta Quest 3S passthrough blending virtual components with the real world</li>
-            <li>Step-by-step guided assembly of Axia engine components</li>
-            <li>Spatial interaction system for component grab, snap, and inspect</li>
-            <li>Educational overlay system with contextual tooltips</li>
-          </ul>
-          <div class="proj-links">
-            <a href="https://youtu.be/VC0Wj0lu6FI" target="_blank" class="link-bracket">GAMEPLAY_VIDEO</a>
-            <a href="https://github.com/esyad" target="_blank" class="link-bracket">GITHUB_REPO</a>
+        <div class="project-info">
+          <span class="project-badge">FINAL YEAR PROJECT</span>
+          <h3 class="project-title">GearUp</h3>
+          <p class="project-desc">An immersive Mixed Reality tabletop simulator that puts a Perodua Axia engine in your hands - without needing a real engine bay. Uses Meta Quest 3S passthrough to layer virtual engine components onto your physical workspace.</p>
+          
+          <div class="project-meta-grid">
+            <div class="meta-item"><span class="meta-label">Role</span><span class="meta-value">Solo Lead Developer</span></div>
+            <div class="meta-item"><span class="meta-label">Engine</span><span class="meta-value">Unity 6.3</span></div>
+            <div class="meta-item"><span class="meta-label">Platform</span><span class="meta-value">Meta Quest 3S (MR)</span></div>
+            <div class="meta-item"><span class="meta-label">Tech</span><span class="meta-value">Meta XR SDK / Passthrough</span></div>
+          </div>
+          
+          <div class="project-links">
+            <a href="https://youtu.be/VC0Wj0lu6FI" target="_blank" class="proj-link">Gameplay Video</a>
+            <a href="https://github.com/esyad" target="_blank" class="proj-link">GitHub Profile</a>
           </div>
         </div>
       </article>
 
-      <!-- GALAAAAH -->
-      <article class="project-module reveal">
-        <div class="proj-meta">
-          <span class="proj-type">DICE DIGITAL GAME (UPCOMING)</span>
-          <h3 class="proj-title">GALAAAAH</h3>
-          <ul class="proj-specs">
-            <li><span>ROLE</span> Technical Artist</li>
-            <li><span>ENGINE</span> Unity 6.0</li>
-            <li><span>TEAM</span> Janji Siap</li>
-            <li><span>PLATFORM</span> Mobile & PC</li>
-          </ul>
-        </div>
-        <div class="proj-media">
-          <div class="proj-media-inner">
-            <img src="https://img.youtube.com/vi/5ISpG9fWjJo/maxresdefault.jpg" alt="GALAAAAH Teaser" />
+      <!-- PROJECT 3: Overtime -->
+      <article class="project-row reveal">
+        <div class="project-frame-wrapper">
+          <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
+          <div class="project-image">
+            <img src="https://img.youtube.com/vi/L5u_-nXka_4/maxresdefault.jpg" alt="Overtime Screenshot" />
           </div>
         </div>
-        <div class="proj-desc">
-          <p>An upcoming 3v3 asymmetric party game featuring traditional Malay heritage and legendary heroes. Developed for the DICE Digital Games Competition with team "Janji Siap".</p>
-          <ul class="proj-features">
-            <li>3v3 asymmetric multiplayer format (3 Attackers vs. 3 Defenders)</li>
-            <li>Showcases Malay heritage through legendary characters</li>
-            <li>Bridging art and programming pipelines as Technical Artist</li>
-          </ul>
-          <div class="proj-links">
-            <a href="https://youtu.be/5ISpG9fWjJo" target="_blank" class="link-bracket">TEASER_VIDEO</a>
+        <div class="project-info">
+          <span class="project-badge badge-jam">1ST PLACE GAME JAM</span>
+          <h3 class="project-title">Overtime</h3>
+          <p class="project-desc">A game jam entry developed with my team "Janji Siap" that secured 1st place in competition. Built under extreme time constraints, requiring rapid asset integration and cohesive visual identity.</p>
+          
+          <div class="project-meta-grid">
+            <div class="meta-item"><span class="meta-label">Role</span><span class="meta-value">3D Artist</span></div>
+            <div class="meta-item"><span class="meta-label">Engine</span><span class="meta-value">Unity 2022.3</span></div>
+            <div class="meta-item"><span class="meta-label">Team</span><span class="meta-value">Janji Siap</span></div>
+            <div class="meta-item"><span class="meta-label">Result</span><span class="meta-value">🥇 1st Place Winner</span></div>
           </div>
-        </div>
-      </article>
-
-      <!-- Overtime (Jam Winner) -->
-      <article class="project-module project-secondary reveal">
-        <div class="proj-meta">
-          <span class="proj-type" style="background:#eab308; color:#000;">🥇 1ST PLACE - GAME JAM</span>
-          <h3 class="proj-title">Overtime</h3>
-          <ul class="proj-specs">
-            <li><span>ROLE</span> 3D Artist</li>
-            <li><span>ENGINE</span> Unity 2022.3</li>
-            <li><span>TEAM</span> Janji Siap</li>
-          </ul>
-        </div>
-        <div class="proj-media">
-          <div class="proj-media-inner">
-            <img src="https://img.youtube.com/vi/L5u_-nXka_4/maxresdefault.jpg" alt="Overtime Trailer" />
-          </div>
-        </div>
-        <div class="proj-desc">
-          <p>A game jam entry developed with my team "Janji Siap" that secured 1st place in competition. Responsible for modelling, texturing, and asset integration to give the game its visual identity under tight constraints.</p>
-          <div class="proj-links">
-            <a href="https://youtu.be/jB-o6vJV1kM" target="_blank" class="link-bracket">GAMEPLAY</a>
-            <a href="https://youtu.be/L5u_-nXka_4" target="_blank" class="link-bracket">TRAILER</a>
-            <a href="https://symocolon.itch.io/overtime" target="_blank" class="link-bracket">ITCH.IO</a>
+          
+          <div class="project-links">
+            <a href="https://youtu.be/jB-o6vJV1kM" target="_blank" class="proj-link">Gameplay</a>
+            <a href="https://youtu.be/L5u_-nXka_4" target="_blank" class="proj-link">Trailer</a>
+            <a href="https://symocolon.itch.io/overtime" target="_blank" class="proj-link">Itch.io</a>
           </div>
         </div>
       </article>
 
-      <!-- Shopper Sprint -->
-      <article class="project-module project-secondary reveal">
-        <div class="proj-meta">
-          <span class="proj-type">SOLO PROJECT</span>
-          <h3 class="proj-title">Shopper Sprint</h3>
-          <ul class="proj-specs">
-            <li><span>ROLE</span> Solo Developer</li>
-            <li><span>ENGINE</span> Unreal Engine 5</li>
-            <li><span>LANG</span> C++ / Blueprints</li>
-          </ul>
-        </div>
-        <div class="proj-media">
-          <div class="proj-media-inner">
-            <img src="https://img.youtube.com/vi/w5gwGCYqP2k/maxresdefault.jpg" alt="Shopper Sprint" />
+      <!-- PROJECT 4: Shopper Sprint -->
+      <article class="project-row reveal">
+        <div class="project-frame-wrapper">
+          <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
+          <div class="project-image">
+            <img src="https://img.youtube.com/vi/w5gwGCYqP2k/maxresdefault.jpg" alt="Shopper Sprint Screenshot" />
           </div>
         </div>
-        <div class="proj-desc">
-          <p>A fast-paced solo project built entirely in Unreal Engine 5. Designed and developed independently, showcasing UE5 gameplay mechanics, level design, and C++ programming from the ground up.</p>
-          <div class="proj-links">
-            <a href="https://youtu.be/SkhSrkr-nh8" target="_blank" class="link-bracket">GAMEPLAY</a>
-            <a href="https://youtu.be/w5gwGCYqP2k" target="_blank" class="link-bracket">TRAILER</a>
-            <a href="https://esyaaaad.itch.io/shopper-sprint" target="_blank" class="link-bracket">ITCH.IO</a>
-            <a href="https://github.com/esyad" target="_blank" class="link-bracket">GITHUB</a>
+        <div class="project-info">
+          <span class="project-badge">SOLO PROJECT</span>
+          <h3 class="project-title">Shopper Sprint</h3>
+          <p class="project-desc">A fast-paced solo project built entirely in Unreal Engine 5. Designed and developed independently, Shopper Sprint showcases UE5 gameplay mechanics, level design, and C++ programming from the ground up.</p>
+          
+          <div class="project-meta-grid">
+            <div class="meta-item"><span class="meta-label">Role</span><span class="meta-value">Solo Developer</span></div>
+            <div class="meta-item"><span class="meta-label">Engine</span><span class="meta-value">Unreal Engine 5</span></div>
+            <div class="meta-item"><span class="meta-label">Language</span><span class="meta-value">C++ & Blueprints</span></div>
+            <div class="meta-item"><span class="meta-label">Platform</span><span class="meta-value">PC</span></div>
+          </div>
+          
+          <div class="project-links">
+            <a href="https://youtu.be/SkhSrkr-nh8" target="_blank" class="proj-link">Gameplay</a>
+            <a href="https://youtu.be/w5gwGCYqP2k" target="_blank" class="proj-link">Trailer</a>
+            <a href="https://esyaaaad.itch.io/shopper-sprint" target="_blank" class="proj-link">Itch.io</a>
+            <a href="https://github.com/esyad" target="_blank" class="proj-link">GitHub</a>
           </div>
         </div>
       </article>
 
-      <!-- Rituals of The Forgotten -->
-      <article class="project-module project-secondary reveal" style="border-bottom:none;">
-        <div class="proj-meta">
-          <span class="proj-type">GROUP PROJECT</span>
-          <h3 class="proj-title">Rituals of The Forgotten</h3>
-          <ul class="proj-specs">
-            <li><span>ROLE</span> Programmer</li>
-            <li><span>ENGINE</span> Unreal Engine 5</li>
-            <li><span>LANG</span> C++ / Blueprints</li>
-          </ul>
-        </div>
-        <div class="proj-media">
-          <div class="proj-media-inner">
-            <img src="https://img.youtube.com/vi/jRwgF_0p9B8/maxresdefault.jpg" alt="Rituals of The Forgotten" />
+      <!-- PROJECT 5: Rituals of The Forgotten -->
+      <article class="project-row reveal">
+        <div class="project-frame-wrapper">
+          <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
+          <div class="project-image">
+            <img src="https://img.youtube.com/vi/jRwgF_0p9B8/maxresdefault.jpg" alt="Rituals of The Forgotten Screenshot" />
           </div>
         </div>
-        <div class="proj-desc">
-          <p>A collaborative group project. As the team's programmer, I was responsible for core gameplay systems and scripting logic, working alongside artists and designers to bring the game's atmosphere to life.</p>
-          <div class="proj-links">
-            <a href="https://youtu.be/hBnFbFO0KHE" target="_blank" class="link-bracket">GAMEPLAY</a>
-            <a href="https://youtu.be/jRwgF_0p9B8" target="_blank" class="link-bracket">TRAILER</a>
-            <a href="https://github.com/esyad" target="_blank" class="link-bracket">GITHUB</a>
+        <div class="project-info">
+          <span class="project-badge">GROUP PROJECT</span>
+          <h3 class="project-title">Rituals of The Forgotten</h3>
+          <p class="project-desc">A collaborative group project built in Unreal Engine 5. As the team's programmer, I was responsible for core gameplay systems and scripting logic, working alongside artists and designers to bring the game's atmosphere to life.</p>
+          
+          <div class="project-meta-grid">
+            <div class="meta-item"><span class="meta-label">Role</span><span class="meta-value">Programmer</span></div>
+            <div class="meta-item"><span class="meta-label">Engine</span><span class="meta-value">Unreal Engine 5</span></div>
+            <div class="meta-item"><span class="meta-label">Language</span><span class="meta-value">C++ & Blueprints</span></div>
+            <div class="meta-item"><span class="meta-label">Type</span><span class="meta-value">Academic Project</span></div>
+          </div>
+          
+          <div class="project-links">
+            <a href="https://youtu.be/hBnFbFO0KHE" target="_blank" class="proj-link">Gameplay</a>
+            <a href="https://youtu.be/jRwgF_0p9B8" target="_blank" class="proj-link">Trailer</a>
+            <a href="https://github.com/esyad" target="_blank" class="proj-link">GitHub</a>
           </div>
         </div>
       </article>
@@ -953,90 +721,173 @@
     </div>
   </section>
 
-  <!-- SKILLS SECTION -->
-  <section id="skills">
+  <!-- DEVELOPER STACK SECTION -->
+  <section id="skills" class="section-trigger" data-theme-target="skills">
     <div class="container">
       <div class="section-header reveal">
         <h2 class="section-title">Developer Stack</h2>
-        <span class="section-id">02 // SKILLS</span>
+        <span class="section-num">02</span>
       </div>
 
       <div class="stack-grid">
+        <!-- Engines -->
         <div class="stack-category reveal">
-          <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
-          <div class="stack-header"><span>01</span><span>ENGINES_AND_XR</span></div>
-          <div class="stack-list">
-            <div class="stack-item"><span class="stack-name">Unity</span><span class="stack-meta">Advanced (v6.3)</span></div>
-            <div class="stack-item"><span class="stack-name">Unreal Engine 5</span><span class="stack-meta">Intermediate</span></div>
-            <div class="stack-item"><span class="stack-name">Meta XR SDK</span><span class="stack-meta">Passthrough API</span></div>
-            <div class="stack-item"><span class="stack-name">Mixed Reality</span><span class="stack-meta">Active FYP</span></div>
+          <h4 class="stack-category-title">GAME ENGINES</h4>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">Unity</span><span class="skill-level">Advanced (90%)</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90%"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">Unreal Engine</span><span class="skill-level">Intermediate (65%)</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="65%"></div></div>
           </div>
         </div>
 
+        <!-- Programming -->
         <div class="stack-category reveal">
-          <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
-          <div class="stack-header"><span>02</span><span>PROGRAMMING</span></div>
-          <div class="stack-list">
-            <div class="stack-item"><span class="stack-name">C#</span><span class="stack-meta">Primary</span></div>
-            <div class="stack-item"><span class="stack-name">C++</span><span class="stack-meta">Intermediate</span></div>
-            <div class="stack-item"><span class="stack-name">JavaScript</span><span class="stack-meta">Web/Prototyping</span></div>
+          <h4 class="stack-category-title">PROGRAMMING</h4>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">C#</span><span class="skill-level">Primary (90%)</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90%"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">C++</span><span class="skill-level">Intermediate (65%)</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="65%"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">JavaScript</span><span class="skill-level">Prototyping (70%)</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="70%"></div></div>
           </div>
         </div>
 
+        <!-- 3D / Creative -->
         <div class="stack-category reveal">
-          <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
-          <div class="stack-header"><span>03</span><span>3D_AND_CREATIVE</span></div>
-          <div class="stack-list">
-            <div class="stack-item"><span class="stack-name">Blender</span><span class="stack-meta">Intermediate</span></div>
-            <div class="stack-item"><span class="stack-name">After Effects</span><span class="stack-meta">Intermediate</span></div>
-            <div class="stack-item"><span class="stack-name">Photoshop</span><span class="stack-meta">Proficient</span></div>
+          <h4 class="stack-category-title">3D / CREATIVE</h4>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">Photoshop</span><span class="skill-level">Proficient (80%)</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="80%"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">After Effects</span><span class="skill-level">Intermediate (65%)</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="65%"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">Blender</span><span class="skill-level">Intermediate (60%)</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="60%"></div></div>
           </div>
         </div>
-
+        
+        <!-- XR & Tools (Tags) -->
         <div class="stack-category reveal">
-          <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
-          <div class="stack-header"><span>04</span><span>TOOLS_AND_WORKFLOW</span></div>
-          <div class="stack-list">
-            <div class="stack-item"><span class="stack-name">Git / GitHub</span><span class="stack-meta">Version Control</span></div>
-            <div class="stack-item"><span class="stack-name">Diversion</span><span class="stack-meta">Unity Vcs</span></div>
-            <div class="stack-item"><span class="stack-name">Generative AI</span><span class="stack-meta">Gemini, Claude, Tripo</span></div>
+          <h4 class="stack-category-title">XR & DEVELOPMENT TOOLS</h4>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">XR / Mixed Reality</span><span class="skill-level">Active Development</span></div>
+            <div class="skill-tags">
+              <span class="skill-tag">Meta XR SDK</span>
+              <span class="skill-tag">Passthrough API</span>
+            </div>
+          </div>
+          <div class="skill-item" style="margin-top: 1rem;">
+            <div class="skill-header"><span class="skill-name">Dev & AI Tools</span><span class="skill-level">Workflow</span></div>
+            <div class="skill-tags">
+              <span class="skill-tag">GitHub</span><span class="skill-tag">Diversion</span><span class="skill-tag">Trello</span>
+              <span class="skill-tag">Gemini</span><span class="skill-tag">Claude</span><span class="skill-tag">Tripo AI</span>
+              <span class="skill-tag">Nano Banana</span><span class="skill-tag">Veo</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CREATIVE / VIDEO SECTION -->
-  <section id="creative">
+  <!-- VIDEO EDITING SECTION -->
+  <section id="video" class="section-trigger" data-theme-target="video">
     <div class="container">
       <div class="section-header reveal">
-        <h2 class="section-title">Video Editing</h2>
-        <span class="section-id">03 // CREATIVE</span>
+        <h2 class="section-title">Video & Trailers</h2>
+        <span class="section-num">03</span>
       </div>
-      <p class="reveal" style="max-width: 600px; color: var(--text-muted); margin-bottom: 3rem;">
-        Motion graphics and video editing work produced in Adobe After Effects. From game trailers to motion sequences — here's where code meets craft.
-      </p>
+      
+      <p class="video-intro reveal">Motion graphics and video editing work produced in Adobe After Effects, alongside official trailers cut for my personal and collaborative game projects.</p>
 
       <div class="video-grid">
-        <a href="https://youtu.be/_W7vuIfUGyQ" target="_blank" class="video-card reveal">
-          <div class="video-thumb"><img src="https://img.youtube.com/vi/_W7vuIfUGyQ/maxresdefault.jpg" alt="Purify"></div>
+        <!-- Game Trailers -->
+        <a href="https://youtu.be/5ISpG9fWjJo" target="_blank" class="video-card reveal">
+          <div class="video-frame">
+            <div class="video-thumb">
+              <img src="https://img.youtube.com/vi/5ISpG9fWjJo/maxresdefault.jpg" alt="GALAAAAH Trailer">
+              <div class="play-btn"></div>
+            </div>
+          </div>
           <div class="video-info">
-            <div class="video-title">Purify</div>
-            <div class="video-desc">Motion Graphic Subject Final Project</div>
+            <div class="video-title">GALAAAAH Official Teaser</div>
+            <div class="video-desc">Game Trailer</div>
           </div>
         </a>
+
+        <a href="https://youtu.be/w5gwGCYqP2k" target="_blank" class="video-card reveal">
+          <div class="video-frame">
+            <div class="video-thumb">
+              <img src="https://img.youtube.com/vi/w5gwGCYqP2k/maxresdefault.jpg" alt="Shopper Sprint Trailer">
+              <div class="play-btn"></div>
+            </div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Shopper Sprint Official Trailer</div>
+            <div class="video-desc">Game Trailer / After Effects</div>
+          </div>
+        </a>
+
+        <a href="https://youtu.be/jRwgF_0p9B8" target="_blank" class="video-card reveal">
+          <div class="video-frame">
+            <div class="video-thumb">
+              <img src="https://img.youtube.com/vi/jRwgF_0p9B8/maxresdefault.jpg" alt="Rituals of The Forgotten Trailer">
+              <div class="play-btn"></div>
+            </div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Rituals of The Forgotten Trailer</div>
+            <div class="video-desc">Game Trailer / Workshop 2</div>
+          </div>
+        </a>
+
+        <!-- Original AE Work -->
+        <a href="https://youtu.be/_W7vuIfUGyQ" target="_blank" class="video-card reveal">
+          <div class="video-frame">
+            <div class="video-thumb">
+              <img src="https://img.youtube.com/vi/_W7vuIfUGyQ/maxresdefault.jpg" alt="Purify">
+              <div class="play-btn"></div>
+            </div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Purify</div>
+            <div class="video-desc">Motion Graphic Final Project</div>
+          </div>
+        </a>
+
         <a href="https://youtu.be/9_7WnIPIWyc" target="_blank" class="video-card reveal">
-          <div class="video-thumb"><img src="https://img.youtube.com/vi/9_7WnIPIWyc/maxresdefault.jpg" alt="Individual Introduction"></div>
+          <div class="video-frame">
+            <div class="video-thumb">
+              <img src="https://img.youtube.com/vi/9_7WnIPIWyc/maxresdefault.jpg" alt="Individual Introduction">
+              <div class="play-btn"></div>
+            </div>
+          </div>
           <div class="video-info">
             <div class="video-title">Individual Introduction</div>
             <div class="video-desc">Motion Graphic Assignment</div>
           </div>
         </a>
+
         <a href="https://youtu.be/O9tkU4vfQ8Y" target="_blank" class="video-card reveal">
-          <div class="video-thumb"><img src="https://img.youtube.com/vi/O9tkU4vfQ8Y/hqdefault.jpg" alt="Eid Fitr 2026"></div>
+          <div class="video-frame">
+            <div class="video-thumb">
+              <img src="https://img.youtube.com/vi/O9tkU4vfQ8Y/hqdefault.jpg" alt="Eid Fitr 2026">
+              <div class="play-btn"></div>
+            </div>
+          </div>
           <div class="video-info">
             <div class="video-title">Eid Fitr 2026</div>
-            <div class="video-desc">Self project short video</div>
+            <div class="video-desc">Self Project / After Effects</div>
           </div>
         </a>
       </div>
@@ -1044,199 +895,181 @@
   </section>
 
   <!-- EXPERIENCE & EDUCATION SECTION -->
-  <section id="experience">
+  <section id="experience" class="section-trigger" data-theme-target="experience">
     <div class="container">
       <div class="section-header reveal">
-        <h2 class="section-title">Chronology</h2>
-        <span class="section-id">04 // EXP & EDU</span>
+        <h2 class="section-title">Experience</h2>
+        <span class="section-num">04</span>
       </div>
 
       <div class="timeline">
-        <!-- Node 1 -->
         <div class="timeline-node reveal">
-          <div class="node-header">
-            <span class="node-role">JUDGE</span>
-            <h4 class="node-title">UTeM Global Project Based Learning Summer Camp 2026</h4>
-          </div>
+          <span class="node-role">Judge</span>
+          <h4 class="node-title">UTeM Global Project Based Learning Summer Camp 2026</h4>
           <p class="node-desc">Served as a presentation judge for international students from Pakistan during the UTeM Metaverse Summer Camp, evaluating their project-based learning outcomes.</p>
-          <img src="juri pakistan.jpg" alt="Summer Camp Judge" class="node-img" />
         </div>
 
-        <!-- Node 2 -->
         <div class="timeline-node reveal">
-          <div class="node-header">
-            <span class="node-role">SHOWCASE EXHIBITOR</span>
-            <h4 class="node-title">Hari TVET Negara 2026</h4>
-          </div>
+          <span class="node-role">Showcase Exhibitor</span>
+          <h4 class="node-title">Hari TVET Negara 2026</h4>
           <p class="node-desc">Presented VR projects by seniors alongside my own Mixed Reality game, GearUp, at a national-level TVET exhibition - representing UTeM's Faculty of ICT.</p>
-          <img src="tvet.jpg" alt="TVET 2026" class="node-img" />
         </div>
 
-        <!-- Node 3 -->
         <div class="timeline-node reveal">
-          <div class="node-header">
-            <span class="node-role">FACILITATOR - MDEC INITIATIVE</span>
-            <h4 class="node-title">Next Gen Teen Xchange 2025</h4>
-          </div>
+          <span class="node-role">Facilitator — MDEC Initiative</span>
+          <h4 class="node-title">Next Gen Teen Xchange 2025</h4>
           <p class="node-desc">Mentored high school students in creative thinking, problem solving, and digital board game development as part of the national MDEC programme.</p>
-          <img src="teen xchange.jpg" alt="Teen Xchange" class="node-img" />
         </div>
 
-        <!-- Node 4 -->
         <div class="timeline-node reveal">
-          <div class="node-header">
-            <span class="node-role">SECRETARY</span>
-            <h4 class="node-title">FICTS - Faculty ICT Student Society</h4>
-          </div>
+          <span class="node-role">Secretary</span>
+          <h4 class="node-title">FICTS - Faculty ICT Student Society</h4>
           <p class="node-desc">Managed administrative operations, official documentation, and organisational coordination to support student engagement and faculty-level initiatives.</p>
-          <img src="su.jpg" alt="Secretary" class="node-img" />
         </div>
 
-        <!-- Node 5 -->
         <div class="timeline-node reveal">
-          <div class="node-header">
-            <span class="node-role">PARTICIPANT - 🥇 1ST PLACE</span>
-            <h4 class="node-title">Play Next D'FTMK Technity Game Jam</h4>
-          </div>
+          <span class="node-role">Participant — 🥇 1st Place</span>
+          <h4 class="node-title">Play Next D'FTMK Technity Game Jam</h4>
           <p class="node-desc">Competed in a faculty game jam, developing a 3D game under time constraints with team "Janji Siap". Secured 1st place against teams across the faculty.</p>
-          <img src="game jam.jpg" alt="Game Jam" class="node-img" />
         </div>
-        
-        <!-- Node 6 -->
+
         <div class="timeline-node reveal">
-          <div class="node-header">
-            <span class="node-role">FACILITATOR</span>
-            <h4 class="node-title">Hari Bersama Fakulti & D'FICTS Kickstart</h4>
-          </div>
+          <span class="node-role">Facilitator</span>
+          <h4 class="node-title">Hari Bersama Fakulti & D'FICTS Kickstart</h4>
           <p class="node-desc">Guided new intake degree students through structured orientation activities, facilitating their transition into university life at UTeM.</p>
-          <img src="hbf.jpg" alt="Facilitator" class="node-img" />
         </div>
       </div>
 
-      <!-- Education -->
       <div class="edu-grid">
         <div class="edu-card reveal">
-          <div class="edu-year">2023 - 2027 (Expected)</div>
+          <span class="edu-year">2023 - 2027 (EXPECTED)</span>
           <h4 class="edu-school">Universiti Teknikal Malaysia Melaka</h4>
-          <div class="edu-deg">Bachelor of IT (Game Technology) With Honours</div>
+          <p class="edu-deg">Bachelor of IT (Game Technology) With Honours</p>
           <div class="edu-grade">CGPA 3.83</div>
-          <div class="mono" style="font-size:0.75rem; margin-top:0.5rem; color:var(--text-dark);">Dean's List - Every Semester</div>
+          <span class="mono" style="font-size: 0.65rem; color: var(--text-muted); margin-top: 0.25rem;">DEAN'S LIST EVERY SEMESTER</span>
         </div>
+        
         <div class="edu-card reveal">
-          <div class="edu-year">2022 - 2023</div>
+          <span class="edu-year">2022 - 2023</span>
           <h4 class="edu-school">Kolej Matrikulasi Selangor</h4>
-          <div class="edu-deg">Malaysian Matriculation - Science Stream</div>
+          <p class="edu-deg">Malaysian Matriculation - Science Stream</p>
           <div class="edu-grade">PNGS 3.75</div>
-          <div class="mono" style="font-size:0.75rem; margin-top:0.5rem; color:var(--text-dark);">MUET Band 4</div>
+          <span class="mono" style="font-size: 0.65rem; color: var(--text-muted); margin-top: 0.25rem;">MUET BAND 4</span>
         </div>
+
         <div class="edu-card reveal">
-          <div class="edu-year">2017 - 2022</div>
+          <span class="edu-year">2017 - 2022</span>
           <h4 class="edu-school">SMK Putrajaya Presint 14 (1)</h4>
-          <div class="edu-deg">SPM - Science Stream</div>
+          <p class="edu-deg">SPM - Science Stream</p>
           <div class="edu-grade">2A+ 2A 1A- 1B+ 2B 1C+</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ABOUT SECTION -->
-  <section id="about">
-    <div class="container">
-      <div class="section-header reveal">
-        <h2 class="section-title">About</h2>
-        <span class="section-id">05 // PROFILE</span>
-      </div>
-
-      <div class="about-layout">
-        <div class="about-text reveal">
-          <p class="lead">I don't just make games - I build the systems that blur the line between physical and digital worlds.</p>
-          <p>As a <strong>Game Technology student at UTeM</strong> with a consistent Dean's List record (CGPA 3.83), I've shaped my studies around the intersection of real-time engines, XR development, and intelligent game systems.</p>
-          <p>My Final Year Project, <strong>GearUp</strong>, is a Mixed Reality tabletop simulator that lets users assemble Perodua Axia engine components in spatial AR via Meta Quest 3S passthrough - hands-on learning without a physical engine bay.</p>
-          <p>Outside the lab: facilitator, game jam champion, student society secretary, and national exhibition presenter at <strong>Hari TVET Negara 2026</strong>.</p>
-        </div>
-        <div class="about-photo reveal">
-          <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
-          <img src="gmbr sendiri (1).png" alt="Profile Photo" />
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- CONTACT SECTION -->
-  <section id="contact">
+  <section id="contact" class="section-trigger" data-theme-target="contact">
     <div class="container">
       <h2 class="contact-title reveal">Let's build something<br><span>worth playing.</span></h2>
       <p class="contact-desc reveal">Open to internship roles in Game Development, XR Programming, or any position that puts interactive technology to meaningful use.</p>
       
       <div class="contact-links reveal">
-        <a href="mailto:danishirsyad.mr@gmail.com" class="btn"><span>EMAIL ME</span></a>
-        <a href="https://linkedin.com/in/danish-irsyad-317963363" target="_blank" class="btn"><span>LINKEDIN</span></a>
-        <a href="https://github.com/esyad" target="_blank" class="btn"><span>GITHUB</span></a>
-        <a href="DANISH%20IRSYAD%20CV.pdf" download class="btn" style="background:var(--accent); color:#000; border-color:var(--accent);"><span>DOWNLOAD RESUME</span></a>
+        <a href="mailto:danishirsyad.mr@gmail.com" class="btn btn-solid"><span>Email Me</span></a>
+        <a href="https://linkedin.com/in/danish-irsyad-317963363" target="_blank" class="btn"><span>LinkedIn</span></a>
+        <a href="https://github.com/esyad" target="_blank" class="btn"><span>GitHub</span></a>
+        <a href="DANISH%20IRSYAD%20CV.pdf" download class="btn"><span>Download Resume</span></a>
       </div>
       
       <div class="footer-meta reveal">
-        <span>+60 14-623 1810 // Durian Tunggal, Malacca, Malaysia</span>
-        <span>© 2026 DANISH IRSYAD BIN MUHAMMAD RIDHA. DESIGNED FOR REALITY AND RENDER.</span>
+        <span>+60 14-623 1810 / Durian Tunggal, Malacca, Malaysia</span>
+        <span>© 2026 DANISH IRSYAD BIN MUHAMMAD RIDHA</span>
       </div>
     </div>
   </section>
 
-  <!-- Vanilla JS for Scroll Reveals and Mobile Menu -->
+  <!-- SCRIPTS -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       
-      // Intersection Observer for Scroll Reveals
-      const revealElements = document.querySelectorAll('.reveal');
-      
+      // 1. SCROLL REVEAL (Elements fading up)
       const revealObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target); // Only animate once
+            
+            // If it contains skill bars, animate them
+            const skillBars = entry.target.querySelectorAll('.skill-bar-fill');
+            if(skillBars.length > 0) {
+              setTimeout(() => {
+                skillBars.forEach(bar => {
+                  bar.style.width = bar.getAttribute('data-width');
+                });
+              }, 300);
+            }
+            observer.unobserve(entry.target);
           }
         });
-      }, {
-        root: null,
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
+      }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      // 2. DYNAMIC BACKGROUND THEME SYSTEM
+      const body = document.body;
+      const themeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const theme = entry.target.getAttribute('data-theme-target');
+            if (theme) {
+              body.setAttribute('data-theme', theme);
+            }
+          }
+        });
+      }, { rootMargin: "-40% 0px -60% 0px" });
+
+      document.querySelectorAll('.section-trigger').forEach(section => {
+        themeObserver.observe(section);
       });
 
-      revealElements.forEach(el => revealObserver.observe(el));
+      // 3. NAVBAR SCROLL STATE
+      const navbar = document.getElementById('navbar');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      }, { passive: true });
 
-      // Simple Mobile Menu Toggle
-      const mobileToggle = document.querySelector('.mobile-toggle');
-      const navLinks = document.querySelector('.nav-links');
-      
-      mobileToggle.addEventListener('click', () => {
-        if (navLinks.style.display === 'flex') {
-          navLinks.style.display = 'none';
-        } else {
-          navLinks.style.display = 'flex';
-          navLinks.style.flexDirection = 'column';
-          navLinks.style.position = 'absolute';
-          navLinks.style.top = '100%';
-          navLinks.style.left = '0';
-          navLinks.style.right = '0';
-          navLinks.style.background = 'rgba(9, 9, 11, 0.95)';
-          navLinks.style.padding = '1rem 2rem 2rem';
-          navLinks.style.borderBottom = '1px solid var(--border)';
-        }
-      });
-      
-      // Reset menu on resize
-      window.addEventListener('resize', () => {
-        if (window.innerWidth > 900) {
-          navLinks.style.display = 'flex';
-          navLinks.style.flexDirection = 'row';
-          navLinks.style.position = 'static';
-          navLinks.style.background = 'transparent';
-          navLinks.style.padding = '0';
-          navLinks.style.borderBottom = 'none';
-        } else {
-          navLinks.style.display = 'none';
-        }
-      });
+      // 4. SUBTLE PARALLAX FOR BACKGROUND SHAPES
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const shape1 = document.getElementById('parallax-shape-1');
+        const shape2 = document.getElementById('parallax-shape-2');
+        
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              const scrolled = window.pageYOffset;
+              shape1.style.transform = `translateY(${scrolled * 0.15}px)`;
+              shape2.style.transform = `translateY(${scrolled * 0.08}px)`;
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }, { passive: true });
+        
+        // Very subtle mouse interaction
+        document.addEventListener('mousemove', (e) => {
+          const mouseX = e.clientX / window.innerWidth - 0.5;
+          const mouseY = e.clientY / window.innerHeight - 0.5;
+          
+          window.requestAnimationFrame(() => {
+            shape1.style.transform = `translate(${mouseX * -30}px, ${mouseY * -30}px)`;
+            shape2.style.transform = `translate(${mouseX * 20}px, ${mouseY * 20}px)`;
+          });
+        });
+      }
+
     });
   </script>
 </body>
