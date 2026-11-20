@@ -21,6 +21,7 @@
       --beige-contact: #E8E0D5; /* Slightly deeper warm tone for footer/contact */
       --maroon: #7A2021;
       --maroon-dark: #4A1212;
+      --gold: #B48037;
       --charcoal: #1A1513;
       --charcoal-light: #2C2522;
       
@@ -54,6 +55,7 @@
       font-size: 1rem;
       line-height: 1.6;
       overflow-x: hidden;
+      isolation: isolate;
       background-color: var(--bg-color);
       transition: color 0.8s ease, background-color 0.8s ease;
     }
@@ -69,9 +71,8 @@
       position: fixed;
       inset: 0;
       z-index: -1;
+      overflow: hidden;
       pointer-events: none;
-      background-color: var(--bg-color);
-      transition: background-color 1s ease;
     }
     
     /* Subtle Grain/Noise Overlay */
@@ -97,26 +98,54 @@
     }
     body[data-theme="skills"] .bg-grid { opacity: 0.4; }
 
-    /* Parallax shapes */
-    .bg-shape {
+    /* Scroll-responsive maroon and gold backdrop */
+    .bg-orbit {
       position: absolute;
+      width: clamp(23rem, 72vw, 69rem);
+      height: clamp(20rem, 72vh, 48rem);
       border-radius: 50%;
-      filter: blur(100px);
-      opacity: 0;
-      transition: opacity 1s ease;
+      border-block-start: 1px solid #aa772f83;
+      box-shadow: 0 -1rem 0 -15px #a9713452, 0 -2rem 0 -31px #7a202147;
+      opacity: .82;
     }
-    .bg-shape.shape-1 {
-      width: 600px; height: 600px;
-      background: rgba(122, 32, 33, 0.08); /* Soft maroon bloom */
-      top: 10%; right: -10%;
+    .bg-orbit.maroon {
+      top: 7%;
+      right: -16%;
+      background: radial-gradient(ellipse at 54% 38%, #8a2b3352, #b455522b 34%, transparent 69%);
+      transform: translate3d(
+        calc(var(--bg-x, 0px) + var(--bg-pointer-x, 0px)),
+        calc(var(--bg-y, 0px) + var(--bg-pointer-y, 0px)), 0
+      ) rotate(var(--bg-angle, -23deg));
     }
-    .bg-shape.shape-2 {
-      width: 500px; height: 500px;
-      background: rgba(44, 37, 34, 0.05); /* Soft charcoal bloom */
-      bottom: 10%; left: -5%;
+    .bg-orbit.gold {
+      bottom: -16%;
+      left: -18%;
+      background: radial-gradient(ellipse at 55% 43%, #d6a64f60, #f0ca762d 35%, transparent 70%);
+      transform: translate3d(
+        calc(var(--bg-counter-x, 0px) - var(--bg-pointer-x, 0px)),
+        calc(var(--bg-counter-y, 0px) - var(--bg-pointer-y, 0px)), 0
+      ) rotate(var(--bg-counter-angle, 25deg));
     }
-    body[data-theme="hero"] .shape-1, body[data-theme="hero"] .shape-2,
-    body[data-theme="projects"] .shape-1, body[data-theme="experience"] .shape-2 { opacity: 1; }
+    .bg-gleams {
+      position: absolute;
+      inset: 0;
+      transform: translate3d(var(--gleam-x, 0px), var(--gleam-y, 0px), 0);
+      opacity: var(--gleam-opacity, .66);
+    }
+    .bg-gleams span {
+      position: absolute;
+      top: var(--y);
+      left: var(--x);
+      width: var(--size, 5px);
+      aspect-ratio: 1;
+      background: var(--gold);
+      border-radius: 50%;
+      box-shadow: 0 0 10px #d5a150a6;
+    }
+    .bg-gleams span:nth-child(3n + 1) {
+      border-radius: 0;
+      clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+    }
 
     /* =========================================
        TYPOGRAPHY & UTILITIES
@@ -175,7 +204,7 @@
 
     /* Scroll Reveal */
     .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
-    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .reveal.is-visible, .reveal:focus-within { opacity: 1; transform: translateY(0); }
 
     /* =========================================
        NAVIGATION
@@ -301,9 +330,6 @@
       pointer-events: none;
       mix-blend-mode: multiply;
     }
-    .project-row:hover .project-image img { transform: scale(1.03); }
-    .project-row:hover .project-image::after { opacity: 0.15; }
-    .project-row:hover .project-frame-wrapper { border-color: var(--accent); }
 
     /* Project Info */
     .project-info { display: flex; flex-direction: column; gap: 1.5rem; }
@@ -405,7 +431,7 @@
       background: var(--beige-light);
       transition: border-color var(--transition), transform var(--transition);
     }
-    .video-card:hover { border-color: var(--maroon); transform: translateY(-4px); }
+
     
     /* Full Color Thumbnails */
     .video-thumb {
@@ -442,9 +468,10 @@
       transition: opacity 0.4s ease; mix-blend-mode: multiply;
     }
 
-    .video-card:hover .video-thumb img { transform: scale(1.05); }
-    .video-card:hover .play-btn { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    .video-card:hover .video-thumb::after { opacity: 0.25; }
+    :is(.video-card:focus-visible, .video-card:active) .play-btn {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
 
     /* Dark, highly readable typography on beige card surface */
     .video-info { padding: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; }
@@ -510,13 +537,23 @@
       .hero-eyebrow { justify-content: center; }
       .hero-desc { margin: 1.5rem auto; border-left: none; border-top: 2px solid var(--accent); padding-left: 0; padding-top: 1.5rem; }
       .hero-actions { justify-content: center; }
-      .hero-visual { display: none; }
+      .hero-visual { width: min(100%, 19rem); justify-self: center; }
+      .hero-grid { row-gap: 2.25rem; }
+      .hero-visual-inner { aspect-ratio: 4/4.6; }
       .stack-grid, .video-grid, .edu-grid { grid-template-columns: 1fr; }
     }
     
     @media (max-width: 768px) {
       :root { --section-padding: 5rem 1.5rem; }
-      .nav-links { display: none; }
+      .navbar { padding: .65rem 0 .4rem; background: #f3efe7f5; }
+      .nav-inner { flex-direction: column; gap: .25rem; }
+      .nav-links { justify-content: center; gap: clamp(.4rem, 2vw, .95rem); flex-wrap: wrap; }
+      .nav-links a { display: inline-flex; align-items: center; min-height: 2rem; font-size: .67rem; letter-spacing: .05em; }
+      .nav-links a::after { bottom: 2px; }
+      #hero { min-height: 100svh; padding-top: 8.2rem; padding-bottom: 3.5rem; }
+      .hero-visual { width: min(100%, 14rem); padding: .7rem; }
+      .hero-actions { flex-wrap: wrap; }
+      .hero-actions .btn { justify-content: center; padding-inline: 1.25rem; }
       .project-title { font-size: 2rem; }
       .project-meta-grid { grid-template-columns: 1fr; gap: 1rem; }
       .node-img { width: 100%; }
@@ -524,11 +561,11 @@
 
     /* Accessibility / Reduced Motion */
     @media (prefers-reduced-motion: reduce) {
-      * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+      * { transition-duration: 0.01ms !important; animation: none !important; }
       .reveal { opacity: 1; transform: none; }
       .skill-bar-fill { transition: none !important; }
-      #bg-system { transition: none; }
-      .bg-shape { display: none; }
+      html { scroll-behavior: auto; }
+      .bg-gleams { opacity: .45; }
     }
 
     /* Requested portfolio additions — original design retained. */
@@ -575,14 +612,75 @@
       .hero-achievement img { width: 66px; height: 82px; }
       .achievement-title { font-size: 1.1rem; }
     }
+    .media-trigger {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .hero-visual-inner.media-trigger { background: transparent; }
+    .media-trigger:disabled { cursor: default; }
+    .media-trigger:focus-visible { outline: 2px solid var(--maroon); outline-offset: 4px; }
+    .media-trigger img { transition: transform .48s cubic-bezier(.25, 1, .5, 1); }
+    .media-trigger::before {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      background: linear-gradient(111deg, transparent 28%, #f7c3704d 46%, #ffedba65 50%, transparent 70%);
+      pointer-events: none;
+      transform: translateX(-130%);
+    }
+    .media-trigger.is-illuminated img { animation: media-pulse .88s ease-out; }
+    .media-trigger.is-illuminated::before { animation: frame-sheen .86s ease-out; }
+    :is(.hero-visual, .project-frame-wrapper):has(.media-trigger.is-illuminated) {
+      border-color: var(--gold);
+      box-shadow: 0 10px 28px #7a202128, 0 0 1.4rem #bf883435;
+    }
+    .hero-visual, .project-frame-wrapper { transition: border-color var(--transition), box-shadow var(--transition); }
+    :is(.btn, .hero-achievement, .video-card):active { border-color: var(--gold); }
+    .btn:active::before { transform: translateY(0); }
+    .btn:active { color: var(--beige-light); }
+    @keyframes frame-sheen {
+      from { transform: translateX(-130%); }
+      to { transform: translateX(130%); }
+    }
+    @keyframes media-pulse {
+      0%, 100% { transform: scale(1); }
+      38% { transform: scale(1.052); }
+    }
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+      .media-trigger:not(:disabled):hover img { transform: scale(1.045); }
+      .media-trigger:not(:disabled):hover::before { animation: frame-sheen .86s ease-out; }
+      :is(.hero-visual, .project-frame-wrapper):has(.media-trigger:hover) { border-color: var(--gold); }
+      .video-card:hover { border-color: var(--maroon); transform: translateY(-4px); }
+      .video-card:hover .video-thumb img { transform: scale(1.05); }
+      .video-card:hover .play-btn { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      .video-card:hover .video-thumb::after { opacity: .25; }
+    }
+    @media (hover: none) {
+      .video-card .play-btn { opacity: 1; transform: translate(-50%, -50%) scale(.84); }
+    }
   </style>
 </head>
 <body>
 
-  <div id="bg-system">
+  <div id="bg-system" aria-hidden="true">
     <div class="bg-grid"></div>
-    <div class="bg-shape shape-1" id="parallax-shape-1"></div>
-    <div class="bg-shape shape-2" id="parallax-shape-2"></div>
+    <div class="bg-orbit maroon"></div>
+    <div class="bg-orbit gold"></div>
+    <div class="bg-gleams">
+      <span style="--x:9%;--y:27%;--size:14px"></span>
+      <span style="--x:15%;--y:73%"></span>
+      <span style="--x:27%;--y:81%;--size:6px"></span>
+      <span style="--x:73%;--y:23%;--size:16px"></span>
+      <span style="--x:90%;--y:16%;--size:6px"></span>
+      <span style="--x:92%;--y:46%"></span>
+      <span style="--x:87%;--y:78%;--size:13px"></span>
+      <span style="--x:63%;--y:85%;--size:6px"></span>
+    </div>
   </div>
 
   <nav class="navbar" id="navbar">
@@ -623,9 +721,9 @@
       
       <div class="hero-visual reveal">
         <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
-        <div class="hero-visual-inner">
+        <button class="hero-visual-inner media-trigger" type="button" aria-label="Highlight Danish Irsyad’s portrait" disabled>
           <img src="gmbr sendiri (1).png" alt="Danish Irsyad Professional Portrait" />
-        </div>
+        </button>
       </div>
     </div>
   </section>
@@ -640,9 +738,9 @@
       <article class="project-row reveal">
         <div class="project-frame-wrapper">
           <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
-          <div class="project-image">
+          <button class="project-image media-trigger" type="button" aria-label="Highlight GALAAAAH Official Trailer thumbnail" disabled>
             <img src="assets/-sWLzxF174k.jpg" alt="GALAAAAH Official Trailer thumbnail" />
-          </div>
+          </button>
         </div>
         <div class="project-info">
           <span class="project-badge">DICE 4.0 GOLD AWARD</span>
@@ -670,9 +768,9 @@
       <article class="project-row reveal">
         <div class="project-frame-wrapper">
           <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
-          <div class="project-image">
+          <button class="project-image media-trigger" type="button" aria-label="Highlight GearUp Gameplay" disabled>
             <img src="assets/VC0Wj0lu6FI.jpg" alt="GearUp Gameplay" />
-          </div>
+          </button>
         </div>
         <div class="project-info">
           <span class="project-badge">FINAL YEAR PROJECT</span>
@@ -697,9 +795,9 @@
       <article class="project-row reveal">
         <div class="project-frame-wrapper">
           <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
-          <div class="project-image">
+          <button class="project-image media-trigger" type="button" aria-label="Highlight Overtime Screenshot" disabled>
             <img src="assets/L5u_-nXka_4.jpg" alt="Overtime Screenshot" />
-          </div>
+          </button>
         </div>
         <div class="project-info">
           <span class="project-badge badge-jam">1ST PLACE GAME JAM</span>
@@ -724,9 +822,9 @@
       <article class="project-row reveal">
         <div class="project-frame-wrapper">
           <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
-          <div class="project-image">
+          <button class="project-image media-trigger" type="button" aria-label="Highlight Shopper Sprint Screenshot" disabled>
             <img src="assets/w5gwGCYqP2k.jpg" alt="Shopper Sprint Screenshot" />
-          </div>
+          </button>
         </div>
         <div class="project-info">
           <span class="project-badge">SOLO PROJECT</span>
@@ -752,9 +850,9 @@
       <article class="project-row reveal">
         <div class="project-frame-wrapper">
           <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
-          <div class="project-image">
+          <button class="project-image media-trigger" type="button" aria-label="Highlight Rituals of The Forgotten Screenshot" disabled>
             <img src="assets/jRwgF_0p9B8.jpg" alt="Rituals of The Forgotten Screenshot" />
-          </div>
+          </button>
         </div>
         <div class="project-info">
           <span class="project-badge">GROUP PROJECT</span>
@@ -1174,45 +1272,74 @@
         themeObserver.observe(section);
       });
 
-      // 3. NAVBAR SCROLL STATE
       const navbar = document.getElementById('navbar');
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-          navbar.classList.add('scrolled');
+      const background = document.getElementById('bg-system');
+      const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+      const imageButtons = document.querySelectorAll('.media-trigger');
+
+      function syncMotionPreference() {
+        imageButtons.forEach(button => {
+          button.disabled = motionPreference.matches;
+          if (motionPreference.matches) button.classList.remove('is-illuminated');
+        });
+        if (motionPreference.matches) {
+          background.removeAttribute('style');
         } else {
-          navbar.classList.remove('scrolled');
+          scheduleBackgroundUpdate();
         }
+      }
+
+      imageButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          if (!motionPreference.matches) button.classList.add('is-illuminated');
+        });
+        button.addEventListener('animationend', event => {
+          if (event.animationName === 'media-pulse') {
+            button.classList.remove('is-illuminated');
+          }
+        });
+      });
+
+      let backgroundFrame;
+      function updateBackground() {
+        backgroundFrame = undefined;
+        const position = Math.max(0, window.scrollY);
+        navbar.classList.toggle('scrolled', position > 50);
+        if (motionPreference.matches) return;
+
+        const phase = position / Math.max(window.innerHeight, 1);
+        const travel = Math.min(window.innerWidth * .23, 246);
+        const sweep = Math.sin(phase * 2.45);
+        const rise = Math.sin(phase * 1.68);
+        const style = background.style;
+        style.setProperty('--bg-x', (-travel * sweep).toFixed(1) + 'px');
+        style.setProperty('--bg-y', (rise * -106).toFixed(1) + 'px');
+        style.setProperty('--bg-angle', (-23 + sweep * 16).toFixed(1) + 'deg');
+        style.setProperty('--bg-counter-x', (travel * sweep * .84).toFixed(1) + 'px');
+        style.setProperty('--bg-counter-y', (rise * 93).toFixed(1) + 'px');
+        style.setProperty('--bg-counter-angle', (25 - sweep * 13).toFixed(1) + 'deg');
+        style.setProperty('--gleam-x', (sweep * -travel * .31).toFixed(1) + 'px');
+        style.setProperty('--gleam-y', (rise * -79).toFixed(1) + 'px');
+        style.setProperty('--gleam-opacity', (.66 + .29 * Math.sin(phase * 4)).toFixed(2));
+      }
+
+      function scheduleBackgroundUpdate() {
+        if (backgroundFrame === undefined) backgroundFrame = requestAnimationFrame(updateBackground);
+      }
+
+      document.addEventListener('pointermove', event => {
+        if (!finePointer.matches || event.pointerType !== 'mouse' || motionPreference.matches) return;
+        const style = background.style;
+        style.setProperty('--bg-pointer-x', ((event.clientX / window.innerWidth - .5) * 34).toFixed(1) + 'px');
+        style.setProperty('--bg-pointer-y', ((event.clientY / window.innerHeight - .5) * 25).toFixed(1) + 'px');
       }, { passive: true });
 
-      // 4. SUBTLE PARALLAX FOR BACKGROUND SHAPES
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        const shape1 = document.getElementById('parallax-shape-1');
-        const shape2 = document.getElementById('parallax-shape-2');
-        
-        let ticking = false;
-        window.addEventListener('scroll', () => {
-          if (!ticking) {
-            window.requestAnimationFrame(() => {
-              const scrolled = window.pageYOffset;
-              shape1.style.transform = `translateY(${scrolled * 0.15}px)`;
-              shape2.style.transform = `translateY(${scrolled * 0.08}px)`;
-              ticking = false;
-            });
-            ticking = true;
-          }
-        }, { passive: true });
-        
-        // Very subtle mouse interaction
-        document.addEventListener('mousemove', (e) => {
-          const mouseX = e.clientX / window.innerWidth - 0.5;
-          const mouseY = e.clientY / window.innerHeight - 0.5;
-          
-          window.requestAnimationFrame(() => {
-            shape1.style.transform = `translate(${mouseX * -30}px, ${mouseY * -30}px)`;
-            shape2.style.transform = `translate(${mouseX * 20}px, ${mouseY * 20}px)`;
-          });
-        });
-      }
+      window.addEventListener('scroll', scheduleBackgroundUpdate, { passive: true });
+      window.addEventListener('resize', scheduleBackgroundUpdate);
+      motionPreference.addEventListener('change', syncMotionPreference);
+      syncMotionPreference();
+      scheduleBackgroundUpdate();
     });
   </script>
 
