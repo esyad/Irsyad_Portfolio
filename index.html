@@ -15,10 +15,10 @@
        ========================================= */
     :root {
       /* Base Palette - Warm & Premium */
-      --beige-light: #F9F7F2;
-      --beige: #F3EFE7;
-      --beige-dark: #E6DFD3;
-      --beige-contact: #E8E0D5; /* Slightly deeper warm tone for footer/contact */
+      --beige-light: #F1E5CF;
+      --beige: #E8D8BA;
+      --beige-dark: #DFC9A6;
+      --beige-contact: #E4D1B4;
       --maroon: #7A2021;
       --maroon-dark: #4A1212;
       --gold: #AB773E;
@@ -30,7 +30,7 @@
       /* Dynamic Theme Variables */
       --bg-color: var(--beige);
       --text-main: var(--charcoal);
-      --text-muted: #5C544F;
+      --text-muted: #554941;
       --accent: var(--maroon);
       --border-color: rgba(26, 21, 19, 0.15);
       
@@ -235,7 +235,7 @@
        HERO SECTION
        ========================================= */
     #hero, #contact {
-      --text-main: #faf6f0;
+      --text-main: #F4E8D6;
       --text-muted: #c9bdb6;
       --accent: var(--gold-light);
       --border-color: #d6ad7254;
@@ -319,8 +319,10 @@
     }
     .hero-visual img { width: 100%; height: 100%; object-fit: cover; object-position: center 38%; }
     #hero .btn, #contact .btn { color: var(--gold-light); border-color: #d6ad72a3; }
-    #hero .btn-solid { color: #fff8ee; background: #842630; border-color: #ac555b; }
+    #hero .btn-solid { color: #F9EAD3; background: #842630; border-color: #ac555b; }
+    #contact .btn-solid { color: #241818; background: var(--gold-light); border-color: var(--gold-light); }
     #hero .btn::before, #contact .btn::before { background: var(--gold-light); }
+    #contact .btn-solid::before { background: #E7C58F; }
     #hero .btn:is(:hover, :active), #contact .btn:is(:hover, :active) { color: #241818; }
     #hero .btn:focus-visible, #hero .media-trigger:focus-visible, #hero .hero-achievement:focus-visible,
     #contact a:focus-visible, .navbar a:focus-visible { outline-color: var(--gold-light); }
@@ -348,13 +350,23 @@
     .project-row:first-of-type { padding-top: 1.25rem; }
     .project-row:last-child { border-bottom: none; }
 
-    /* Project Frame/Border */
     .project-frame-wrapper {
+      --frame-cut: clamp(.85rem, 2.4vw, 2.2rem);
       position: relative;
-      padding: .44rem;
-      border: 1px solid #7b5251;
+      min-width: 0;
+      padding: .48rem;
       background: var(--panel-dark);
-      transition: border-color var(--transition);
+      clip-path: polygon(0 0, calc(100% - var(--frame-cut)) 0, 100% var(--frame-cut), 100% 100%, var(--frame-cut) 100%, 0 calc(100% - var(--frame-cut)));
+    }
+    .project-frame-wrapper::after {
+      content: "";
+      position: absolute;
+      right: var(--frame-cut);
+      bottom: 0;
+      width: 21%;
+      height: 2px;
+      background: var(--gold-light);
+      pointer-events: none;
     }
     .project-image {
       position: relative;
@@ -362,6 +374,7 @@
       aspect-ratio: 16/9;
       overflow: hidden;
       background: var(--charcoal);
+      clip-path: polygon(0 0, calc(100% - var(--frame-cut)) 0, 100% var(--frame-cut), 100% 100%, var(--frame-cut) 100%, 0 calc(100% - var(--frame-cut)));
     }
     /* Full Color Default */
     .project-image img {
@@ -370,28 +383,24 @@
       object-fit: cover;
       transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     }
-    /* Subtle Maroon overlay on hover */
-    .project-image::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--maroon);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-      mix-blend-mode: multiply;
-    }
-
     /* Project Info */
-    .project-info { display: flex; flex-direction: column; gap: 1.5rem; }
-    .project-badge {
-      font-family: var(--font-mono); font-size: 0.7rem; color: var(--beige-light);
-      background: var(--maroon); padding: 0.3rem 0.6rem;
-      align-self: flex-start; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+    .project-info { display: flex; flex-direction: column; gap: 1.2rem; min-width: 0; }
+    @media (min-width: 1025px) {
+      .project-row:nth-of-type(even) { grid-template-columns: 1fr 1.4fr; }
+      .project-row:nth-of-type(even) .project-frame-wrapper { grid-column: 2; grid-row: 1; }
+      .project-row:nth-of-type(even) .project-info { grid-column: 1; grid-row: 1; }
     }
-    .project-badge.badge-jam { background: #B8860B; }
+    .project-badge {
+      font-family: var(--font-mono); font-size: .7rem; color: var(--maroon-dark);
+      border-left: 3px solid var(--maroon);
+      background: #DCC3A3;
+      padding: .35rem .9rem .35rem .65rem;
+      align-self: flex-start; letter-spacing: .08em; text-transform: uppercase; font-weight: 700;
+      clip-path: polygon(0 0, calc(100% - .45rem) 0, 100% 50%, calc(100% - .45rem) 100%, 0 100%);
+    }
+    .project-badge.badge-jam { background: #DEC18B; border-left-color: #8C622B; }
     
-    .project-title { font-family: var(--font-display); font-size: 2.5rem; line-height: 1.1; color: var(--text-main); font-weight: 700; }
+    .project-title { font-family: var(--font-display); font-size: clamp(2.7rem, 4.7vw, 4.35rem); line-height: .89; color: var(--text-main); font-weight: 800; }
     .project-desc { font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; font-weight: 500; }
     
     .project-meta-grid {
@@ -406,10 +415,43 @@
     .meta-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
     .meta-value { font-family: var(--font-body); font-weight: 600; font-size: 0.95rem; color: var(--text-main); }
 
-    .project-links { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; }
-    .proj-link { font-family: var(--font-mono); font-size: 0.75rem; color: var(--charcoal); text-transform: uppercase; letter-spacing: 0.1em; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700; }
-    .proj-link:hover { color: var(--accent); }
-    .proj-link::before { content: '→'; color: var(--accent); }
+    .project-links { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: .5rem; }
+    .proj-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+      min-height: 2.8rem;
+      max-width: 100%;
+      padding: .65rem .93rem;
+      border: 1px solid #9A7162;
+      color: var(--maroon-dark);
+      background: var(--beige-light);
+      font: 700 .74rem/1.35 var(--font-mono);
+      letter-spacing: .04em;
+      text-align: center;
+      text-transform: uppercase;
+      transition: background var(--transition), border-color var(--transition), color var(--transition), transform var(--transition);
+    }
+    .proj-link:first-child { color: var(--beige-light); background: var(--maroon-dark); border-color: var(--maroon-dark); }
+    .proj-link:is(:hover, :active) { color: var(--beige-light); background: var(--maroon); border-color: var(--maroon); }
+    .proj-link:active { transform: translateY(1px); }
+    .proj-link[data-video]::before {
+      content: "";
+      width: 0;
+      height: 0;
+      border: solid transparent;
+      border-width: .27rem 0 .27rem .42rem;
+      border-left-color: currentColor;
+    }
+    .character-showcase-action .btn {
+      min-height: 2.8rem;
+      padding: .65rem .93rem;
+      color: var(--maroon-dark);
+      background: #DFC598;
+      border-color: #8D683F;
+    }
+    .character-showcase-action .btn:is(:hover, :active) { color: var(--beige-light); }
 
     /* =========================================
        DEVELOPER STACK (BARS)
@@ -475,11 +517,14 @@
       gap: 2rem;
     }
     
-    .video-card { 
-      display: flex; flex-direction: column; 
-      cursor: pointer; 
-      border: 1px solid var(--border-color);
-      background: var(--beige-light);
+    .video-card {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      cursor: pointer;
+      border: 0;
+      border-bottom: 2px solid #967057;
+      background: #E4D2B5;
       transition: border-color var(--transition), transform var(--transition);
     }
 
@@ -489,21 +534,24 @@
       position: relative;
       aspect-ratio: 16/9;
       overflow: hidden;
-      background: #000;
+      background: var(--charcoal);
       border-bottom: 1px solid var(--border-color);
+      clip-path: polygon(0 0, calc(100% - 1.15rem) 0, 100% 1.15rem, 100% 100%, 0 100%);
     }
     .video-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
     
     .play-btn {
       position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%) scale(0.9);
-      width: 60px; height: 60px;
-      background: rgba(122, 32, 33, 0.95);
+      bottom: .65rem;
+      left: .65rem;
+      width: 2.8rem;
+      height: 2.8rem;
+      background: var(--maroon-dark);
+      border: 1px solid #D6AD72;
       border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0;
-      transition: all var(--transition);
+      display: grid;
+      place-items: center;
+      transition: background var(--transition), transform var(--transition);
       z-index: 2;
     }
     .play-btn::before {
@@ -520,11 +568,11 @@
     }
 
     :is(.video-card:focus-visible, .video-card:active) .play-btn {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
+      background: var(--maroon);
+      transform: scale(1.08);
     }
 
-    /* Dark, highly readable typography on beige card surface */
+    /* Video titles sit on a warm caption strip. */
     .video-info { padding: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; }
     .video-title { font-family: var(--font-display); font-size: 1.25rem; color: var(--maroon-dark); font-weight: 700; line-height: 1.2; }
     .video-desc { font-family: var(--font-mono); font-size: 0.75rem; color: var(--charcoal); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
@@ -548,14 +596,41 @@
     .node-title { font-family: var(--font-display); font-size: 1.75rem; color: var(--text-main); margin-bottom: 1rem; font-weight: 700;}
     .node-desc { font-size: 1.05rem; color: var(--charcoal); max-width: 700px; margin-bottom: 1.5rem; font-weight: 500; }
     
-    /* Restored Experience Images - Full Color */
-    .node-img {
+    .experience-zoom {
+      display: block;
+      position: relative;
+      width: min(100%, 480px);
       max-width: 100%;
-      width: 480px;
-      border: 1px solid var(--border-color);
-      padding: 0.5rem;
-      background: var(--beige-light);
-      border-radius: 2px;
+      padding: 0;
+      border: 1px solid #A78164;
+      background: #DCC7A8;
+      overflow: hidden;
+      cursor: zoom-in;
+      touch-action: manipulation;
+    }
+    .experience-zoom .node-img { width: 100%; height: auto; transition: transform .36s cubic-bezier(.22, .72, .22, 1); }
+    .experience-zoom::after {
+      content: "+";
+      position: absolute;
+      display: grid;
+      place-items: center;
+      right: .55rem;
+      bottom: .55rem;
+      width: 2rem;
+      height: 2rem;
+      color: var(--beige-light);
+      background: var(--maroon-dark);
+      border: 1px solid #D6AD72;
+      border-radius: 50%;
+      font: 600 1.1rem/1 var(--font-mono);
+      pointer-events: none;
+    }
+    .experience-zoom:focus-visible { outline: 2px solid var(--maroon-dark); outline-offset: 4px; }
+    .experience-zoom[aria-pressed="true"] { cursor: zoom-out; }
+    .experience-zoom[aria-pressed="true"]::after { content: "−"; }
+    .experience-zoom[aria-pressed="true"] .node-img { transform: scale(1.2); }
+    @media (hover: hover) and (pointer: fine) {
+      .experience-zoom[aria-pressed="false"]:hover .node-img { transform: scale(1.105); }
     }
 
     .edu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 6rem; padding-top: 4rem; border-top: 1px solid var(--border-color); }
@@ -615,9 +690,12 @@
       .section-header { margin-bottom: 1.85rem; }
       .hero-actions { flex-wrap: wrap; }
       .hero-actions .btn { justify-content: center; padding-inline: 1.25rem; }
-      .project-title { font-size: 2rem; }
-      .project-meta-grid { grid-template-columns: 1fr; gap: 1rem; }
-      .node-img { width: 100%; }
+      .project-title { font-size: clamp(2.45rem, 8vw, 3.25rem); }
+      .project-meta-grid { gap: 1rem .6rem; }
+      .project-links { gap: .5rem; }
+      .timeline { margin-left: .35rem; }
+      .timeline-node { padding-left: 1.2rem; }
+      .experience-zoom::after { right: .4rem; bottom: .4rem; }
     }
 
     /* Accessibility / Reduced Motion */
@@ -655,8 +733,8 @@
     .character-intro-card .video-info { padding: 1.25rem; }
     .character-video-help { font-size: .85rem; color: var(--text-muted); margin: 2rem 0 0; }
     .award-photos { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }
-    .award-photos .award-portrait { width: 280px; }
-    .award-photos .award-team { width: 480px; }
+    .award-photos .award-portrait { width: min(100%, 280px); }
+    .award-photos .award-team { width: min(100%, 480px); }
     @media (max-width: 1024px) {
       .hero-achievement { margin: 0 auto; width: 100%; }
       .video-card-featured { grid-column: auto; }
@@ -668,7 +746,6 @@
     @media (max-width: 768px) {
       #galah-character-intros { padding: 7.4rem 0 4.8rem; }
       .character-intro-grid { grid-template-columns: 1fr; }
-      .award-photos .node-img { width: 100%; max-width: 480px; }
       .hero-achievement img { width: 66px; height: 82px; }
       .achievement-title { font-size: 1.1rem; }
     }
@@ -711,11 +788,8 @@
       :is(.hero-visual, .project-frame-wrapper):has(.media-trigger:not(:disabled):hover) { border-color: var(--gold); }
       .video-card:hover { border-color: var(--maroon); transform: translateY(-3px); }
       .video-card:hover .video-thumb img { transform: scale(1.035); }
-      .video-card:hover .play-btn { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      .video-card:hover .play-btn { background: var(--maroon); transform: scale(1.08); }
       .video-card:hover .video-thumb::after { opacity: .14; }
-    }
-    @media (hover: none) {
-      .video-card .play-btn { opacity: 1; transform: translate(-50%, -50%) scale(.84); }
     }
   </style>
 </head>
@@ -799,7 +873,7 @@
           </div>
           
           <div class="project-links">
-            <a href="https://youtu.be/-sWLzxF174k" target="_blank" rel="noopener noreferrer" class="proj-link">Official Trailer</a>
+            <a href="https://youtu.be/-sWLzxF174k" target="_blank" rel="noopener noreferrer" class="proj-link" data-video>Official Trailer</a>
             <a href="https://janjisiap.itch.io/galaaaah" target="_blank" rel="noopener noreferrer" class="proj-link">Itch.io</a>
             <a href="https://janjisiap.studio/" target="_blank" rel="noopener noreferrer" class="proj-link">Website</a>
           </div>
@@ -829,8 +903,8 @@
           </div>
           
           <div class="project-links">
-            <a href="https://youtu.be/VC0Wj0lu6FI" target="_blank" class="proj-link">Single-Player Gameplay</a>
-            <a href="https://youtu.be/d0ADwl737BE" target="_blank" class="proj-link">Multiplayer Gameplay</a>
+            <a href="https://youtu.be/VC0Wj0lu6FI" target="_blank" class="proj-link" data-video>Single-Player Gameplay</a>
+            <a href="https://youtu.be/d0ADwl737BE" target="_blank" class="proj-link" data-video>Multiplayer Gameplay</a>
             <a href="https://github.com/esyad" target="_blank" class="proj-link">GitHub Profile</a>
           </div>
         </div>
@@ -856,8 +930,8 @@
           </div>
           
           <div class="project-links">
-            <a href="https://youtu.be/jB-o6vJV1kM" target="_blank" class="proj-link">Gameplay</a>
-            <a href="https://youtu.be/L5u_-nXka_4" target="_blank" class="proj-link">Trailer</a>
+            <a href="https://youtu.be/jB-o6vJV1kM" target="_blank" class="proj-link" data-video>Gameplay</a>
+            <a href="https://youtu.be/L5u_-nXka_4" target="_blank" class="proj-link" data-video>Trailer</a>
             <a href="https://symocolon.itch.io/overtime" target="_blank" class="proj-link">Itch.io</a>
           </div>
         </div>
@@ -883,8 +957,8 @@
           </div>
           
           <div class="project-links">
-            <a href="https://youtu.be/SkhSrkr-nh8" target="_blank" class="proj-link">Gameplay</a>
-            <a href="https://youtu.be/w5gwGCYqP2k" target="_blank" class="proj-link">Trailer</a>
+            <a href="https://youtu.be/SkhSrkr-nh8" target="_blank" class="proj-link" data-video>Gameplay</a>
+            <a href="https://youtu.be/w5gwGCYqP2k" target="_blank" class="proj-link" data-video>Trailer</a>
             <a href="https://esyaaaad.itch.io/shopper-sprint" target="_blank" class="proj-link">Itch.io</a>
             <a href="https://github.com/esyad" target="_blank" class="proj-link">GitHub</a>
           </div>
@@ -911,8 +985,8 @@
           </div>
           
           <div class="project-links">
-            <a href="https://youtu.be/hBnFbFO0KHE" target="_blank" class="proj-link">Gameplay</a>
-            <a href="https://youtu.be/jRwgF_0p9B8" target="_blank" class="proj-link">Trailer</a>
+            <a href="https://youtu.be/hBnFbFO0KHE" target="_blank" class="proj-link" data-video>Gameplay</a>
+            <a href="https://youtu.be/jRwgF_0p9B8" target="_blank" class="proj-link" data-video>Trailer</a>
             <a href="https://github.com/esyad" target="_blank" class="proj-link">GitHub</a>
           </div>
         </div>
@@ -1046,11 +1120,11 @@
         <a href="https://youtu.be/jRwgF_0p9B8" target="_blank" class="video-card reveal">
           <div class="video-frame">
             <div class="video-thumb">
-              <img src="assets/jRwgF_0p9B8.jpg" alt="Rituals of The Forgotten Trailer">
+              <img src="assets/jRwgF_0p9B8.jpg" alt="Ritual Of The Forgotten Official Trailer">
               <div class="play-btn"></div>
             </div>
             <div class="video-info">
-              <div class="video-title">Rituals of The Forgotten Trailer</div>
+              <div class="video-title">Ritual Of The Forgotten Official Trailer</div>
               <div class="video-desc">Game Trailer / Workshop 2</div>
             </div>
           </div>
@@ -1107,11 +1181,15 @@
       <div class="timeline">
         <div class="timeline-node reveal" id="dice-gold-award">
           <span class="node-role">Gold Award — Digital Game Category</span>
-          <h4 class="node-title">DICE 4.0 — GALAAAAH</h4>
+          <h4 class="node-title">DICE 4.0</h4>
           <p class="node-desc">Received a Gold Award in the Digital Game category at DICE 4.0 with team "Janji Siap" for GALAAAAH. Contributed as Technical Artist to a 3v3 multiplayer mobile game inspired by Galah Panjang and Malay legendary heroes.</p>
           <div class="award-photos">
-            <img src="pegangtrofi.png" alt="Danish Irsyad holding his DICE 4.0 award" class="node-img award-portrait" loading="lazy" />
-            <img src="gmbrmenang.jpg" alt="UTeM team at the DICE 4.0 award event" class="node-img award-team" loading="lazy" />
+            <button type="button" class="experience-zoom award-portrait" aria-label="Zoom Danish Irsyad holding his DICE 4.0 award" aria-pressed="false" disabled>
+              <img src="pegangtrofi.png" alt="Danish Irsyad holding his DICE 4.0 award" class="node-img" loading="lazy" />
+            </button>
+            <button type="button" class="experience-zoom award-team" aria-label="Zoom UTeM team at the DICE 4.0 award event" aria-pressed="false" disabled>
+              <img src="gmbrmenang.jpg" alt="UTeM team at the DICE 4.0 award event" class="node-img" loading="lazy" />
+            </button>
           </div>
         </div>
 
@@ -1120,42 +1198,54 @@
           <span class="node-role">Judge</span>
           <h4 class="node-title">UTeM Global Project Based Learning Summer Camp 2026</h4>
           <p class="node-desc">Served as a presentation judge for international students from Pakistan during the UTeM Metaverse Summer Camp, evaluating their project-based learning outcomes.</p>
-          <img src="juri pakistan.jpg" alt="UTeM Global Summer Camp Judge" class="node-img" />
+          <button type="button" class="experience-zoom" aria-label="Zoom UTeM Global Summer Camp Judge" aria-pressed="false" disabled>
+            <img src="juri pakistan.jpg" alt="UTeM Global Summer Camp Judge" class="node-img" />
+          </button>
         </div>
 
         <div class="timeline-node reveal">
           <span class="node-role">Showcase Exhibitor</span>
           <h4 class="node-title">Hari TVET Negara 2026</h4>
           <p class="node-desc">Presented VR projects by seniors alongside my own Mixed Reality game, GearUp, at a national-level TVET exhibition - representing UTeM's Faculty of ICT.</p>
-          <img src="tvet.jpg" alt="Hari TVET Negara Showcase" class="node-img" />
+          <button type="button" class="experience-zoom" aria-label="Zoom Hari TVET Negara Showcase" aria-pressed="false" disabled>
+            <img src="tvet.jpg" alt="Hari TVET Negara Showcase" class="node-img" />
+          </button>
         </div>
 
         <div class="timeline-node reveal">
           <span class="node-role">Facilitator — MDEC Initiative</span>
           <h4 class="node-title">Next Gen Teen Xchange 2025</h4>
           <p class="node-desc">Mentored high school students in creative thinking, problem solving, and digital board game development as part of the national MDEC programme.</p>
-          <img src="teen xchange.jpg" alt="Next Gen Teen Xchange" class="node-img" />
+          <button type="button" class="experience-zoom" aria-label="Zoom Next Gen Teen Xchange" aria-pressed="false" disabled>
+            <img src="teen xchange.jpg" alt="Next Gen Teen Xchange" class="node-img" />
+          </button>
         </div>
 
         <div class="timeline-node reveal">
           <span class="node-role">Secretary</span>
           <h4 class="node-title">FICTS - Faculty ICT Student Society</h4>
           <p class="node-desc">Managed administrative operations, official documentation, and organisational coordination to support student engagement and faculty-level initiatives.</p>
-          <img src="su.jpg" alt="FICTS Secretary Role" class="node-img" />
+          <button type="button" class="experience-zoom" aria-label="Zoom FICTS Secretary Role" aria-pressed="false" disabled>
+            <img src="su.jpg" alt="FICTS Secretary Role" class="node-img" />
+          </button>
         </div>
 
         <div class="timeline-node reveal">
           <span class="node-role">Participant — 🥇 1st Place</span>
           <h4 class="node-title">Play Next D'FTMK Technity Game Jam</h4>
           <p class="node-desc">Competed in a faculty game jam, developing a 3D game under time constraints with team "Janji Siap". Secured 1st place against teams across the faculty.</p>
-          <img src="game jam.jpg" alt="Game Jam 1st Place" class="node-img" />
+          <button type="button" class="experience-zoom" aria-label="Zoom Game Jam 1st Place" aria-pressed="false" disabled>
+            <img src="game jam.jpg" alt="Game Jam 1st Place" class="node-img" />
+          </button>
         </div>
 
         <div class="timeline-node reveal">
           <span class="node-role">Facilitator</span>
           <h4 class="node-title">Hari Bersama Fakulti & D'FICTS Kickstart</h4>
           <p class="node-desc">Guided new intake degree students through structured orientation activities, facilitating their transition into university life at UTeM.</p>
-          <img src="hbf.jpg" alt="Orientation Facilitator" class="node-img" />
+          <button type="button" class="experience-zoom" aria-label="Zoom Orientation Facilitator" aria-pressed="false" disabled>
+            <img src="hbf.jpg" alt="Orientation Facilitator" class="node-img" />
+          </button>
         </div>
 
       </div>
@@ -1319,6 +1409,14 @@
       const heroStyle = heroSurface.style;
       const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
       const imageButtons = document.querySelectorAll('.media-trigger');
+
+      document.querySelectorAll('.experience-zoom').forEach(button => {
+        button.disabled = false;
+        button.addEventListener('click', () => {
+          const zoomed = button.getAttribute('aria-pressed') === 'true';
+          button.setAttribute('aria-pressed', String(!zoomed));
+        });
+      });
 
       function syncMotionPreference() {
         imageButtons.forEach(button => {
