@@ -530,6 +530,51 @@
       #bg-system { transition: none; }
       .bg-shape { display: none; }
     }
+
+    /* Requested portfolio additions — original design retained. */
+    [hidden] { display: none !important; }
+    html { scroll-padding-top: 100px; }
+    a:focus-visible, video:focus-visible { outline: 2px solid var(--maroon); outline-offset: 5px; }
+    .hero-achievement { display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--border-color); background: var(--beige-light); max-width: 500px; text-align: left; }
+    .hero-achievement:hover { border-color: var(--accent); }
+    .hero-achievement img { width: 76px; height: 92px; object-fit: cover; object-position: 50% 43%; flex: 0 0 auto; }
+    .achievement-label { display: block; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .07em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: .25rem; }
+    .achievement-title { display: block; font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--text-main); line-height: 1.3; }
+    .achievement-detail { display: block; color: var(--text-muted); font-size: .85rem; margin-top: .25rem; }
+    .video-card-featured { grid-column: 1 / -1; }
+    .video-card-featured .video-frame { display: grid; grid-template-columns: 1.8fr 1fr; align-items: center; }
+    .video-card-featured .video-thumb { border-bottom: 0; border-right: 1px solid var(--border-color); }
+    .video-card-featured .video-info { padding: 2rem; }
+    .video-card-featured .video-title { font-size: clamp(1.5rem, 2.5vw, 2rem); }
+    .video-card-featured .video-desc { line-height: 1.7; }
+    .character-showcase-action { margin-top: .25rem; }
+    .character-showcase-action .btn { max-width: 100%; }
+    #galah-character-intros { padding: 9rem 2rem 6rem; min-height: 80vh; }
+    .intro-back { display: inline-flex; margin-bottom: 2rem; }
+    .intro-page-description { max-width: 720px; font-size: 1.05rem; color: var(--text-muted); margin-bottom: 3rem; }
+    .character-intro-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+    .character-intro-card { border: 1px solid var(--border-color); background: var(--beige-light); min-width: 0; }
+    .character-intro-card video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #000; border-bottom: 1px solid var(--border-color); }
+    .character-intro-card .video-info { padding: 1.25rem; }
+    .character-video-help { font-size: .85rem; color: var(--text-muted); margin: 2rem 0 0; }
+    .award-photos { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }
+    .award-photos .award-portrait { width: 280px; }
+    .award-photos .award-team { width: 480px; }
+    @media (max-width: 1024px) {
+      .hero-achievement { margin: 0 auto; width: 100%; }
+      .video-card-featured { grid-column: auto; }
+      .video-card-featured .video-frame { display: block; }
+      .video-card-featured .video-thumb { border-right: 0; border-bottom: 1px solid var(--border-color); }
+      .video-card-featured .video-info { padding: 1.25rem; }
+      .video-card-featured .video-title { font-size: 1.25rem; }
+    }
+    @media (max-width: 768px) {
+      #galah-character-intros { padding: 8rem 1.5rem 5rem; }
+      .character-intro-grid { grid-template-columns: 1fr; }
+      .award-photos .node-img { width: 100%; max-width: 480px; }
+      .hero-achievement img { width: 66px; height: 82px; }
+      .achievement-title { font-size: 1.1rem; }
+    }
   </style>
 </head>
 <body>
@@ -562,6 +607,14 @@
         <p class="hero-desc">
           Final-year <strong>Game Technology student</strong> (CGPA 3.83) specialising in <strong>Mixed Reality</strong> and real-time simulation. Currently shipping <strong>GearUp</strong> — an MR automotive training sim on Meta Quest 3S.
         </p>
+        <a href="#dice-gold-award" class="hero-achievement" aria-label="View DICE 4.0 Gold Award achievement">
+          <img src="pegangtrofi.png" alt="Danish Irsyad holding his DICE 4.0 award" width="76" height="92" />
+          <span>
+            <span class="achievement-label">DICE 4.0 · Digital Game Category</span>
+            <span class="achievement-title">Gold Award — GALAAAAH</span>
+            <span class="achievement-detail">Awarded with team Janji Siap.</span>
+          </span>
+        </a>
         <div class="hero-actions">
           <a href="#work" class="btn btn-solid"><span>View Selected Work</span></a>
           <a href="DANISH%20IRSYAD%20CV.pdf" download class="btn"><span>Resume</span></a>
@@ -588,23 +641,28 @@
         <div class="project-frame-wrapper">
           <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
           <div class="project-image">
-            <img src="https://img.youtube.com/vi/5ISpG9fWjJo/maxresdefault.jpg" alt="GALAAAAH Screenshot" />
+            <img src="assets/-sWLzxF174k.jpg" alt="GALAAAAH Official Trailer thumbnail" />
           </div>
         </div>
         <div class="project-info">
-          <span class="project-badge">UPCOMING DICE DIGITAL GAME</span>
+          <span class="project-badge">DICE 4.0 GOLD AWARD</span>
           <h3 class="project-title">GALAAAAH</h3>
-          <p class="project-desc">An upcoming 3v3 asymmetric party game featuring traditional Malay heritage and legendary heroes. Developed for the DICE Digital Games Competition with team "Janji Siap", targeting both Mobile and PC platforms.</p>
+          <p class="project-desc">A 3v3 multiplayer mobile party game inspired by Galah Panjang, combining traditional Malay heritage and legendary heroes with fast-paced, skill-driven matches. Developed with team "Janji Siap", GALAAAAH received a Gold Award in the Digital Game category at DICE 4.0.</p>
           
           <div class="project-meta-grid">
             <div class="meta-item"><span class="meta-label">Role</span><span class="meta-value">Technical Artist</span></div>
             <div class="meta-item"><span class="meta-label">Engine</span><span class="meta-value">Unity 6.0</span></div>
-            <div class="meta-item"><span class="meta-label">Platform</span><span class="meta-value">Mobile & PC</span></div>
+            <div class="meta-item"><span class="meta-label">Platform</span><span class="meta-value">Mobile</span></div>
             <div class="meta-item"><span class="meta-label">Team</span><span class="meta-value">Janji Siap</span></div>
           </div>
           
           <div class="project-links">
-            <a href="https://youtu.be/5ISpG9fWjJo" target="_blank" class="proj-link">Teaser Video</a>
+            <a href="https://youtu.be/-sWLzxF174k" target="_blank" rel="noopener noreferrer" class="proj-link">Official Trailer</a>
+            <a href="https://janjisiap.itch.io/galaaaah" target="_blank" rel="noopener noreferrer" class="proj-link">Itch.io</a>
+            <a href="https://janjisiap.studio/" target="_blank" rel="noopener noreferrer" class="proj-link">Website</a>
+          </div>
+          <div class="character-showcase-action">
+            <a href="#galah-character-intros" class="btn" id="character-intro-link"><span>View Character Intros</span></a>
           </div>
         </div>
       </article>
@@ -613,7 +671,7 @@
         <div class="project-frame-wrapper">
           <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
           <div class="project-image">
-            <img src="https://img.youtube.com/vi/VC0Wj0lu6FI/hqdefault.jpg" alt="GearUp Gameplay" />
+            <img src="assets/VC0Wj0lu6FI.jpg" alt="GearUp Gameplay" />
           </div>
         </div>
         <div class="project-info">
@@ -640,7 +698,7 @@
         <div class="project-frame-wrapper">
           <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
           <div class="project-image">
-            <img src="https://img.youtube.com/vi/L5u_-nXka_4/maxresdefault.jpg" alt="Overtime Screenshot" />
+            <img src="assets/L5u_-nXka_4.jpg" alt="Overtime Screenshot" />
           </div>
         </div>
         <div class="project-info">
@@ -667,7 +725,7 @@
         <div class="project-frame-wrapper">
           <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
           <div class="project-image">
-            <img src="https://img.youtube.com/vi/w5gwGCYqP2k/maxresdefault.jpg" alt="Shopper Sprint Screenshot" />
+            <img src="assets/w5gwGCYqP2k.jpg" alt="Shopper Sprint Screenshot" />
           </div>
         </div>
         <div class="project-info">
@@ -695,7 +753,7 @@
         <div class="project-frame-wrapper">
           <div class="crosshair tl"></div><div class="crosshair tr"></div><div class="crosshair bl"></div><div class="crosshair br"></div>
           <div class="project-image">
-            <img src="https://img.youtube.com/vi/jRwgF_0p9B8/maxresdefault.jpg" alt="Rituals of The Forgotten Screenshot" />
+            <img src="assets/jRwgF_0p9B8.jpg" alt="Rituals of The Forgotten Screenshot" />
           </div>
         </div>
         <div class="project-info">
@@ -806,10 +864,23 @@
       <p class="video-intro reveal">Motion graphics and video editing work produced in Adobe After Effects, alongside official trailers cut for my personal and collaborative game projects.</p>
 
       <div class="video-grid">
+        <a href="https://youtu.be/-sWLzxF174k" target="_blank" rel="noopener noreferrer" class="video-card video-card-featured reveal">
+          <div class="video-frame">
+            <div class="video-thumb">
+              <img src="assets/-sWLzxF174k.jpg" alt="GALAAAAH Official Trailer" loading="lazy" />
+              <div class="play-btn"></div>
+            </div>
+            <div class="video-info">
+              <div class="video-title">GALAAAAH Official Trailer</div>
+              <div class="video-desc">3v3 Multiplayer Mobile Game<br>DICE 4.0 · Digital Game Gold Award</div>
+            </div>
+          </div>
+        </a>
+
         <a href="https://youtu.be/L5u_-nXka_4" target="_blank" class="video-card reveal">
           <div class="video-frame">
             <div class="video-thumb">
-              <img src="https://img.youtube.com/vi/L5u_-nXka_4/maxresdefault.jpg" alt="Overtime Trailer">
+              <img src="assets/L5u_-nXka_4.jpg" alt="Overtime Trailer">
               <div class="play-btn"></div>
             </div>
             <div class="video-info">
@@ -822,7 +893,7 @@
         <a href="https://youtu.be/w5gwGCYqP2k" target="_blank" class="video-card reveal">
           <div class="video-frame">
             <div class="video-thumb">
-              <img src="https://img.youtube.com/vi/w5gwGCYqP2k/maxresdefault.jpg" alt="Shopper Sprint Trailer">
+              <img src="assets/w5gwGCYqP2k.jpg" alt="Shopper Sprint Trailer">
               <div class="play-btn"></div>
             </div>
             <div class="video-info">
@@ -835,7 +906,7 @@
         <a href="https://youtu.be/jRwgF_0p9B8" target="_blank" class="video-card reveal">
           <div class="video-frame">
             <div class="video-thumb">
-              <img src="https://img.youtube.com/vi/jRwgF_0p9B8/maxresdefault.jpg" alt="Rituals of The Forgotten Trailer">
+              <img src="assets/jRwgF_0p9B8.jpg" alt="Rituals of The Forgotten Trailer">
               <div class="play-btn"></div>
             </div>
             <div class="video-info">
@@ -848,7 +919,7 @@
         <a href="https://youtu.be/_W7vuIfUGyQ" target="_blank" class="video-card reveal">
           <div class="video-frame">
             <div class="video-thumb">
-              <img src="https://img.youtube.com/vi/_W7vuIfUGyQ/maxresdefault.jpg" alt="Purify">
+              <img src="assets/_W7vuIfUGyQ.jpg" alt="Purify">
               <div class="play-btn"></div>
             </div>
             <div class="video-info">
@@ -861,7 +932,7 @@
         <a href="https://youtu.be/9_7WnIPIWyc" target="_blank" class="video-card reveal">
           <div class="video-frame">
             <div class="video-thumb">
-              <img src="https://img.youtube.com/vi/9_7WnIPIWyc/maxresdefault.jpg" alt="Individual Introduction">
+              <img src="assets/9_7WnIPIWyc.jpg" alt="Individual Introduction">
               <div class="play-btn"></div>
             </div>
             <div class="video-info">
@@ -874,7 +945,7 @@
         <a href="https://youtu.be/O9tkU4vfQ8Y" target="_blank" class="video-card reveal">
           <div class="video-frame">
             <div class="video-thumb">
-              <img src="https://img.youtube.com/vi/O9tkU4vfQ8Y/hqdefault.jpg" alt="Eid Fitr 2026">
+              <img src="assets/O9tkU4vfQ8Y.jpg" alt="Eid Fitr 2026">
               <div class="play-btn"></div>
             </div>
             <div class="video-info">
@@ -895,6 +966,16 @@
       </div>
 
       <div class="timeline">
+        <div class="timeline-node reveal" id="dice-gold-award">
+          <span class="node-role">Gold Award — Digital Game Category</span>
+          <h4 class="node-title">DICE 4.0 — GALAAAAH</h4>
+          <p class="node-desc">Received a Gold Award in the Digital Game category at DICE 4.0 with team "Janji Siap" for GALAAAAH. Contributed as Technical Artist to a 3v3 multiplayer mobile game inspired by Galah Panjang and Malay legendary heroes.</p>
+          <div class="award-photos">
+            <img src="pegangtrofi.png" alt="Danish Irsyad holding his DICE 4.0 award" class="node-img award-portrait" loading="lazy" />
+            <img src="gmbrmenang.jpg" alt="UTeM team at the DICE 4.0 award event" class="node-img award-team" loading="lazy" />
+          </div>
+        </div>
+
         
         <div class="timeline-node reveal">
           <span class="node-role">Judge</span>
@@ -966,6 +1047,61 @@
       </div>
     </div>
   </section>
+
+  <main id="galah-character-intros" hidden aria-labelledby="intro-page-title">
+    <div class="container">
+      <a href="#work" class="btn intro-back"><span>Back to Selected Work</span></a>
+      <div class="section-header">
+        <h2 class="section-title" id="intro-page-title" tabindex="-1">GALAAAAH Character Intros</h2>
+      </div>
+      <p class="intro-page-description">A collection of six character introduction videos created for GALAAAAH, showcasing each hero's personality, visual identity and abilities.</p>
+      <div class="character-intro-grid">
+        <article class="character-intro-card">
+          <video controls autoplay muted loop playsinline preload="metadata" poster="assets/hang-tuah-poster.jpg" aria-label="Hang Tuah character introduction">
+            <source src="videos/hang-tuah-intro.mp4" type="video/mp4" />
+            Your browser does not support HTML video. <a href="videos/hang-tuah-intro.mp4">Open the Hang Tuah introduction</a>.
+          </video>
+          <div class="video-info"><h3 class="video-title">Hang Tuah</h3><p class="video-desc">Speedster · Character Introduction</p></div>
+        </article>
+        <article class="character-intro-card">
+          <video controls autoplay muted loop playsinline preload="metadata" poster="assets/badang-poster.jpg" aria-label="Badang character introduction">
+            <source src="videos/badang-intro.mp4" type="video/mp4" />
+            Your browser does not support HTML video. <a href="videos/badang-intro.mp4">Open the Badang introduction</a>.
+          </video>
+          <div class="video-info"><h3 class="video-title">Badang</h3><p class="video-desc">Controller · Character Introduction</p></div>
+        </article>
+        <article class="character-intro-card">
+          <video controls autoplay muted loop playsinline preload="metadata" poster="assets/awang-kenit-poster.jpg" aria-label="Awang Kenit character introduction">
+            <source src="videos/awang-kenit-intro.mp4" type="video/mp4" />
+            Your browser does not support HTML video. <a href="videos/awang-kenit-intro.mp4">Open the Awang Kenit introduction</a>.
+          </video>
+          <div class="video-info"><h3 class="video-title">Awang Kenit</h3><p class="video-desc">Speedster · Character Introduction</p></div>
+        </article>
+        <article class="character-intro-card">
+          <video controls autoplay muted loop playsinline preload="metadata" poster="assets/puteri-gunung-ledang-poster.jpg" aria-label="Puteri Gunung Ledang character introduction">
+            <source src="videos/puteri-gunung-ledang-intro.mp4" type="video/mp4" />
+            Your browser does not support HTML video. <a href="videos/puteri-gunung-ledang-intro.mp4">Open the Puteri Gunung Ledang introduction</a>.
+          </video>
+          <div class="video-info"><h3 class="video-title">Puteri Gunung Ledang</h3><p class="video-desc">Support · Character Introduction</p></div>
+        </article>
+        <article class="character-intro-card">
+          <video controls autoplay muted loop playsinline preload="metadata" poster="assets/hang-li-po-poster.jpg" aria-label="Hang Li Po character introduction">
+            <source src="videos/hang-li-po-intro.mp4" type="video/mp4" />
+            Your browser does not support HTML video. <a href="videos/hang-li-po-intro.mp4">Open the Hang Li Po introduction</a>.
+          </video>
+          <div class="video-info"><h3 class="video-title">Hang Li Po</h3><p class="video-desc">Controller · Character Introduction</p></div>
+        </article>
+        <article class="character-intro-card">
+          <video controls autoplay muted loop playsinline preload="metadata" poster="assets/dang-raya-rani-poster.jpg" aria-label="Dang Raya Rani character introduction">
+            <source src="videos/dang-raya-rani-intro.mp4" type="video/mp4" />
+            Your browser does not support HTML video. <a href="videos/dang-raya-rani-intro.mp4">Open the Dang Raya Rani introduction</a>.
+          </video>
+          <div class="video-info"><h3 class="video-title">Dang Raya Rani</h3><p class="video-desc">Support · Character Introduction</p></div>
+        </article>
+      </div>
+      <p class="character-video-help">Character intros play automatically without sound while visible. Use the video controls to enable audio.</p>
+    </div>
+  </main>
 
   <section id="contact" class="section-trigger" data-theme-target="contact">
     <div class="container">
@@ -1077,6 +1213,81 @@
           });
         });
       }
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const introPage = document.getElementById('galah-character-intros');
+      const portfolioSections = Array.from(document.querySelectorAll('.section-trigger')).filter(section => section.id !== 'contact');
+      const introVideos = Array.from(introPage.querySelectorAll('video'));
+      // Autoplay is muted to satisfy browser autoplay policies.
+      // Play only videos visible in the character gallery.
+      const visibleVideos = new Set();
+      introVideos.forEach(video => {
+        video.muted = true;
+        video.defaultMuted = true;
+      });
+      function updatePlayback(video) {
+        const shouldPlay = !introPage.hidden && !document.hidden && visibleVideos.has(video);
+        if (shouldPlay) {
+          const attempt = video.play();
+          if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
+        } else {
+          video.pause();
+        }
+      }
+      function refreshVisibleVideos() {
+        introVideos.forEach(video => {
+          const rect = video.getBoundingClientRect();
+          const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+          if (!introPage.hidden && rect.height > 0 && visibleHeight >= rect.height * 0.15) {
+            visibleVideos.add(video);
+          } else {
+            visibleVideos.delete(video);
+          }
+          updatePlayback(video);
+        });
+      }
+      if ('IntersectionObserver' in window) {
+        const playbackObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.15) visibleVideos.add(entry.target);
+            else visibleVideos.delete(entry.target);
+            updatePlayback(entry.target);
+          });
+        }, { threshold: [0, 0.15] });
+        introVideos.forEach(video => playbackObserver.observe(video));
+      } else {
+        window.addEventListener('scroll', refreshVisibleVideos, { passive: true });
+      }
+      window.addEventListener('resize', refreshVisibleVideos, { passive: true });
+      document.addEventListener('visibilitychange', refreshVisibleVideos);
+      let galleryWasOpen = false;
+      function showPage() {
+        const showGallery = window.location.hash === '#galah-character-intros';
+        introPage.hidden = !showGallery;
+        portfolioSections.forEach(section => { section.hidden = showGallery; });
+        if (showGallery) {
+          document.body.setAttribute('data-theme', 'projects');
+          document.body.style.backgroundColor = 'var(--beige-light)';
+          window.scrollTo({ top: 0, behavior: 'instant' });
+          document.getElementById('intro-page-title').focus({ preventScroll: true });
+          window.requestAnimationFrame(refreshVisibleVideos);
+        } else if (galleryWasOpen) {
+          introVideos.forEach(video => video.pause());
+          const target = document.getElementById(window.location.hash.slice(1)) || document.getElementById('work');
+          window.requestAnimationFrame(() => target.scrollIntoView({ behavior: 'instant', block: 'start' }));
+        }
+        galleryWasOpen = showGallery;
+      }
+      introVideos.forEach(video => {
+        video.addEventListener('play', () => {
+          if (introPage.hidden || document.hidden) video.pause();
+        });
+      });
+      window.addEventListener('hashchange', showPage);
+      showPage();
     });
   </script>
 </body>
