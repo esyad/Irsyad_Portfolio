@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#411B25" />
   <title>Danish Irsyad | XR Programmer & Game Developer</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,25 +15,24 @@
        COLOR PALETTE & DESIGN TOKENS
        ========================================= */
     :root {
-      /* Base Palette - Warm & Premium */
-      --beige-light: #F1E5CF;
-      --beige: #E8D8BA;
-      --beige-dark: #DFC9A6;
-      --beige-contact: #E4D1B4;
-      --maroon: #7A2021;
-      --maroon-dark: #4A1212;
-      --gold: #AB773E;
-      --gold-light: #D6AD72;
-      --panel-dark: #211D1E;
-      --charcoal: #1A1513;
-      --charcoal-light: #2C2522;
+      --beige-light: #F0E4D0;
+      --beige: #EBDBC3;
+      --beige-dark: #E4D0B6;
+      --maroon: #742E3D;
+      --maroon-dark: #411B25;
+      --gold: #9C7646;
+      --gold-light: #CDA674;
+      --panel-dark: #2B1720;
+      --charcoal: #271D1A;
+      --charcoal-light: #352623;
+      --ink-on-maroon: #DAC6B6;
       
       /* Dynamic Theme Variables */
       --bg-color: var(--beige);
       --text-main: var(--charcoal);
-      --text-muted: #554941;
+      --text-muted: #5A4541;
       --accent: var(--maroon);
-      --border-color: rgba(26, 21, 19, 0.15);
+      --border-color: #411B2533;
       
       /* Typography */
       --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
@@ -83,48 +83,38 @@
       position: absolute;
       inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-      opacity: 0.8;
+      opacity: .55;
       mix-blend-mode: multiply;
     }
 
-    .bg-grid, .hero-surface::before {
-      background-image: linear-gradient(#4f323610 1px, transparent 1px),
-        linear-gradient(90deg, #4f323610 1px, transparent 1px);
-      background-size: 3.25rem 3.25rem;
-    }
     .bg-grid {
       position: absolute;
       inset: -3.25rem 0;
-      opacity: .58;
+      background-image: linear-gradient(#411B2514 1px, transparent 1px),
+        linear-gradient(90deg, #411B2514 1px, transparent 1px);
+      background-size: 3.25rem 3.25rem;
+      opacity: .42;
       transform: translate3d(0, var(--grid-shift, 0px), 0);
       mask-image: linear-gradient(90deg, #000, #0004 40%, #0004 60%, #000);
     }
-    body[data-theme="skills"] .bg-grid { opacity: .95; }
     .bg-panel {
       position: absolute;
       right: -15%;
       top: -26%;
       width: clamp(14rem, 40vw, 38rem);
       height: 155%;
-      border-inline-start: 1px solid #7a20213b;
-      background: linear-gradient(90deg, #7a20210e, #7a202103 56%, transparent);
+      border-inline-start: 1px solid #742E3D33;
+      background: #742E3D08;
       transform: translate3d(var(--bg-x, 0px), var(--bg-y, 0px), 0) skewX(-20deg);
     }
-    .bg-panel::before, .bg-panel::after {
-      content: "";
-      position: absolute;
-      inset: 0 auto 0 1.25rem;
-      border-inline-start: 1px solid #ab773e72;
-    }
-    .bg-panel::after { left: 1.8rem; border-color: #ab773e32; }
     .bg-trace {
       position: absolute;
       inset: 70% auto auto 0;
       width: clamp(7rem, 32vw, 25rem);
       height: 1.5rem;
-      border-block-start: 1px solid #ab773e80;
-      border-inline-end: 2px solid #7a202167;
-      background: repeating-linear-gradient(90deg, #a3713a25 0 1px, transparent 1px .75rem);
+      border-block-start: 1px solid #9C764660;
+      border-inline-end: 2px solid #742E3D60;
+      background: repeating-linear-gradient(90deg, #9C764621 0 1px, transparent 1px .75rem);
       background-size: 100% .4rem;
       background-repeat: no-repeat;
       opacity: .73;
@@ -152,7 +142,6 @@
       width: 3.2rem;
       height: 2px;
       background: var(--maroon);
-      box-shadow: 1.4rem 0 0 var(--gold);
     }
     .section-title {
       font-family: var(--font-display);
@@ -160,7 +149,7 @@
       font-weight: 800;
       line-height: .98;
       text-transform: uppercase;
-      color: var(--text-main);
+      color: var(--maroon-dark);
     }
 
     /* Buttons */
@@ -212,14 +201,13 @@
       top: 0; left: 0; right: 0;
       z-index: 100;
       padding: 1.12rem 0;
-      background: #211d1e;
+      background: var(--maroon-dark);
       transition: background .35s ease;
-      border-bottom: 1px solid #cda6764f;
+      border-bottom: 1px solid #CDA6744F;
     }
     .navbar.scrolled {
-      background: #211d1ef5;
+      background: #411B25F7;
       backdrop-filter: blur(8px);
-      border-bottom: 1px solid #cda67648;
     }
 
     .nav-inner { display: flex; justify-content: space-between; align-items: center; }
@@ -235,10 +223,10 @@
        HERO SECTION
        ========================================= */
     #hero, #contact {
-      --text-main: #F4E8D6;
-      --text-muted: #c9bdb6;
+      --text-main: var(--beige-light);
+      --text-muted: var(--ink-on-maroon);
       --accent: var(--gold-light);
-      --border-color: #d6ad7254;
+      --border-color: #CDA67454;
       color: var(--text-main);
     }
     #hero {
@@ -250,7 +238,7 @@
       align-items: center;
       padding-top: clamp(7rem, 13vh, 9.2rem);
       padding-bottom: 5rem;
-      background: #221d1e;
+      background: var(--maroon-dark);
     }
     .hero-surface {
       position: absolute;
@@ -262,9 +250,9 @@
       content: "";
       position: absolute;
       inset: -3.25rem 0;
-      background-image: linear-gradient(#dfb48016 1px, transparent 1px),
-        linear-gradient(90deg, #dfb48016 1px, transparent 1px);
-      mask-image: linear-gradient(90deg, #0008, #000 65%, #000);
+      background-image: linear-gradient(#CDA67414 1px, transparent 1px),
+        linear-gradient(90deg, #CDA67414 1px, transparent 1px);
+      background-size: 3.25rem 3.25rem;
       transform: translate3d(0, var(--grid-shift, 0px), 0);
     }
     .hero-surface::after {
@@ -274,9 +262,9 @@
       height: 125%;
       top: -12%;
       right: -13%;
-      border-inline-start: 2px solid #d6ad72aa;
-      background: linear-gradient(90deg, #7a2832b5, #462329b3 53%, #311b2170);
-      box-shadow: -1.35rem 0 0 -1.29rem #d6ad7266, -2.2rem 0 0 -2.15rem #d6ad7240;
+      z-index: -1;
+      border-inline-start: 1px solid #CDA67468;
+      background: color-mix(in srgb, var(--maroon) 47%, var(--maroon-dark));
       transform: translate3d(var(--hero-panel-x, 0px), 0, 0) skewX(-19deg);
     }
     .hero-grid {
@@ -308,8 +296,8 @@
     .hero-visual {
       position: relative;
       padding: .72rem;
-      border: 1px solid #a58159;
-      background: #292324;
+      border: 1px solid var(--border-color);
+      background: var(--panel-dark);
     }
     .hero-visual-inner {
       width: 100%;
@@ -318,12 +306,10 @@
       overflow: hidden;
     }
     .hero-visual img { width: 100%; height: 100%; object-fit: cover; object-position: center 38%; }
-    #hero .btn, #contact .btn { color: var(--gold-light); border-color: #d6ad72a3; }
-    #hero .btn-solid { color: #F9EAD3; background: #842630; border-color: #ac555b; }
-    #contact .btn-solid { color: #241818; background: var(--gold-light); border-color: var(--gold-light); }
-    #hero .btn::before, #contact .btn::before { background: var(--gold-light); }
-    #contact .btn-solid::before { background: #E7C58F; }
-    #hero .btn:is(:hover, :active), #contact .btn:is(:hover, :active) { color: #241818; }
+    #hero .btn, #contact .btn { color: var(--beige-light); border-color: #CDA674A3; }
+    #hero .btn-solid, #contact .btn-solid { color: var(--maroon-dark); background: var(--beige-light); border-color: var(--beige-light); }
+    #hero .btn::before, #contact .btn::before { background: var(--beige-dark); }
+    #hero .btn:is(:hover, :active), #contact .btn:is(:hover, :active) { color: var(--maroon-dark); }
     #hero .btn:focus-visible, #hero .media-trigger:focus-visible, #hero .hero-achievement:focus-visible,
     #contact a:focus-visible, .navbar a:focus-visible { outline-color: var(--gold-light); }
     
@@ -393,14 +379,12 @@
     .project-badge {
       font-family: var(--font-mono); font-size: .7rem; color: var(--maroon-dark);
       border-left: 3px solid var(--maroon);
-      background: #DCC3A3;
-      padding: .35rem .9rem .35rem .65rem;
+      padding: .14rem .65rem;
       align-self: flex-start; letter-spacing: .08em; text-transform: uppercase; font-weight: 700;
-      clip-path: polygon(0 0, calc(100% - .45rem) 0, 100% 50%, calc(100% - .45rem) 100%, 0 100%);
     }
-    .project-badge.badge-jam { background: #DEC18B; border-left-color: #8C622B; }
+    .project-badge.badge-jam { border-left-color: var(--gold); }
     
-    .project-title { font-family: var(--font-display); font-size: clamp(2.7rem, 4.7vw, 4.35rem); line-height: .89; color: var(--text-main); font-weight: 800; }
+    .project-title { font-family: var(--font-display); font-size: clamp(2.7rem, 4.7vw, 4.35rem); line-height: .89; color: var(--maroon-dark); font-weight: 800; }
     .project-desc { font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; font-weight: 500; }
     
     .project-meta-grid {
@@ -448,8 +432,8 @@
       min-height: 2.8rem;
       padding: .65rem .93rem;
       color: var(--maroon-dark);
-      background: #DFC598;
-      border-color: #8D683F;
+      background: var(--beige-dark);
+      border-color: var(--gold);
     }
     .character-showcase-action .btn:is(:hover, :active) { color: var(--beige-light); }
 
@@ -523,8 +507,8 @@
       min-width: 0;
       cursor: pointer;
       border: 0;
-      border-bottom: 2px solid #967057;
-      background: #E4D2B5;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--beige-light);
       transition: border-color var(--transition), transform var(--transition);
     }
 
@@ -547,7 +531,7 @@
       width: 2.8rem;
       height: 2.8rem;
       background: var(--maroon-dark);
-      border: 1px solid #D6AD72;
+      border: 1px solid var(--gold-light);
       border-radius: 50%;
       display: grid;
       place-items: center;
@@ -602,35 +586,18 @@
       width: min(100%, 480px);
       max-width: 100%;
       padding: 0;
-      border: 1px solid #A78164;
-      background: #DCC7A8;
+      border: 1px solid var(--border-color);
+      background: var(--beige-dark);
       overflow: hidden;
       cursor: zoom-in;
       touch-action: manipulation;
     }
     .experience-zoom .node-img { width: 100%; height: auto; transition: transform .36s cubic-bezier(.22, .72, .22, 1); }
-    .experience-zoom::after {
-      content: "+";
-      position: absolute;
-      display: grid;
-      place-items: center;
-      right: .55rem;
-      bottom: .55rem;
-      width: 2rem;
-      height: 2rem;
-      color: var(--beige-light);
-      background: var(--maroon-dark);
-      border: 1px solid #D6AD72;
-      border-radius: 50%;
-      font: 600 1.1rem/1 var(--font-mono);
-      pointer-events: none;
-    }
     .experience-zoom:focus-visible { outline: 2px solid var(--maroon-dark); outline-offset: 4px; }
     .experience-zoom[aria-pressed="true"] { cursor: zoom-out; }
-    .experience-zoom[aria-pressed="true"]::after { content: "−"; }
     .experience-zoom[aria-pressed="true"] .node-img { transform: scale(1.2); }
     @media (hover: hover) and (pointer: fine) {
-      .experience-zoom[aria-pressed="false"]:hover .node-img { transform: scale(1.105); }
+      .experience-zoom[aria-pressed="false"]:hover .node-img { transform: scale(1.035); }
     }
 
     .edu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 6rem; padding-top: 4rem; border-top: 1px solid var(--border-color); }
@@ -647,7 +614,7 @@
       padding: clamp(5rem, 9vw, 8rem) 0 clamp(3rem, 6vw, 5rem);
       text-align: center;
       border-top: 1px solid var(--border-color);
-      background: linear-gradient(116deg, #211d1e 60%, #3f2027);
+      background: var(--maroon-dark);
     }
     .contact-title { font-family: var(--font-display); font-size: clamp(3.5rem, 8vw, 6.5rem); color: var(--text-main); line-height: .93; margin-bottom: 1.5rem; font-weight: 800; text-transform: uppercase; }
     .contact-title span { color: var(--gold-light); }
@@ -695,7 +662,6 @@
       .project-links { gap: .5rem; }
       .timeline { margin-left: .35rem; }
       .timeline-node { padding-left: 1.2rem; }
-      .experience-zoom::after { right: .4rem; bottom: .4rem; }
     }
 
     /* Accessibility / Reduced Motion */
@@ -710,8 +676,8 @@
     [hidden] { display: none !important; }
     html { scroll-padding-top: 100px; }
     a:focus-visible, video:focus-visible { outline: 2px solid var(--maroon); outline-offset: 5px; }
-    .hero-achievement { display: flex; align-items: center; gap: 1rem; padding: .85rem; border: 1px solid var(--border-color); border-inline-start: 2px solid var(--gold-light); background: #201b1ce6; max-width: 500px; text-align: left; }
-    .hero-achievement:hover { border-color: var(--accent); }
+    .hero-achievement { display: flex; align-items: center; gap: 1rem; padding: .75rem 0; border-block: 1px solid var(--border-color); max-width: 500px; text-align: left; }
+    .hero-achievement:hover .achievement-title { text-decoration: underline; text-underline-offset: .16em; }
     .hero-achievement img { width: 76px; height: 92px; object-fit: cover; object-position: 50% 43%; flex: 0 0 auto; }
     .achievement-label { display: block; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .07em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: .25rem; }
     .achievement-title { display: block; font-family: var(--font-display); font-size: 1.43rem; font-weight: 700; color: var(--text-main); line-height: 1.3; }
@@ -732,9 +698,16 @@
     .character-intro-card video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #000; border-bottom: 1px solid var(--border-color); }
     .character-intro-card .video-info { padding: 1.25rem; }
     .character-video-help { font-size: .85rem; color: var(--text-muted); margin: 2rem 0 0; }
-    .award-photos { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }
-    .award-photos .award-portrait { width: min(100%, 280px); }
-    .award-photos .award-team { width: min(100%, 480px); }
+    .award-photos {
+      display: grid;
+      /* Match the 3:4 portrait and 2048:1486 team photo at a shared height. */
+      grid-template-columns: minmax(0, .75fr) minmax(0, 1.378fr);
+      gap: clamp(.5rem, 2vw, 1rem);
+      max-width: 49rem;
+    }
+    .award-photos .experience-zoom { width: 100%; min-width: 0; }
+    .award-photos .award-portrait { aspect-ratio: 3 / 4; }
+    .award-photos .node-img { position: absolute; inset: 0; height: 100%; object-fit: cover; }
     @media (max-width: 1024px) {
       .hero-achievement { margin: 0 auto; width: 100%; }
       .video-card-featured { grid-column: auto; }
@@ -786,7 +759,7 @@
       .media-trigger:not(:disabled):hover img { transform: scale(1.034); }
       .media-trigger:not(:disabled):hover::before { opacity: .84; }
       :is(.hero-visual, .project-frame-wrapper):has(.media-trigger:not(:disabled):hover) { border-color: var(--gold); }
-      .video-card:hover { border-color: var(--maroon); transform: translateY(-3px); }
+      .video-card:hover { border-color: var(--maroon); transform: translateY(-2px); }
       .video-card:hover .video-thumb img { transform: scale(1.035); }
       .video-card:hover .play-btn { background: var(--maroon); transform: scale(1.08); }
       .video-card:hover .video-thumb::after { opacity: .14; }
@@ -1187,7 +1160,7 @@
             <button type="button" class="experience-zoom award-portrait" aria-label="Zoom Danish Irsyad holding his DICE 4.0 award" aria-pressed="false" disabled>
               <img src="pegangtrofi.png" alt="Danish Irsyad holding his DICE 4.0 award" class="node-img" loading="lazy" />
             </button>
-            <button type="button" class="experience-zoom award-team" aria-label="Zoom UTeM team at the DICE 4.0 award event" aria-pressed="false" disabled>
+            <button type="button" class="experience-zoom" aria-label="Zoom UTeM team at the DICE 4.0 award event" aria-pressed="false" disabled>
               <img src="gmbrmenang.jpg" alt="UTeM team at the DICE 4.0 award event" class="node-img" loading="lazy" />
             </button>
           </div>
@@ -1384,7 +1357,7 @@
         'skills': 'var(--beige)',
         'video': 'var(--beige-dark)',
         'experience': 'var(--beige-light)',
-        'contact': 'var(--beige-contact)'
+        'contact': 'var(--beige)'
       };
 
       const themeObserver = new IntersectionObserver((entries) => {
