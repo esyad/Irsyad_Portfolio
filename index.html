@@ -535,7 +535,9 @@
       border-radius: 50%;
       display: grid;
       place-items: center;
-      transition: background var(--transition), transform var(--transition);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
       z-index: 2;
     }
     .play-btn::before {
@@ -551,9 +553,8 @@
       transition: opacity 0.4s ease; mix-blend-mode: multiply;
     }
 
-    :is(.video-card:focus-visible, .video-card:active) .play-btn {
-      background: var(--maroon);
-      transform: scale(1.08);
+    @media (hover: hover) and (pointer: fine) {
+      .video-card:hover .play-btn { opacity: 1; }
     }
 
     .video-info { padding: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; }
@@ -766,7 +767,6 @@
       .project-frame-wrapper:has(.media-trigger:not(:disabled):hover) { border-color: var(--accent-edge); }
       .video-card:hover { border-color: var(--maroon); transform: translateY(-2px); box-shadow: 0 14px 32px #411B2518; }
       .video-card:hover .video-thumb img { transform: scale(1.035); }
-      .video-card:hover .play-btn { background: var(--maroon); transform: scale(1.08); }
       .video-card:hover .video-thumb::after { opacity: .14; }
     }
   </style>
